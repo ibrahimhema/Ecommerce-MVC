@@ -1,0 +1,23 @@
+﻿@model  List<BL.ViewModels.ProductViewModel>
+@{
+    ViewBag.Title = "ShowProductByCategory";
+    Layout = "~/Views/Shared/_MainSiteLayoutView.cshtml";
+}
+
+
+<div class="container">
+    <div class="row">
+        @foreach (var product in Model)
+        {
+        <div class="col-md-4 col-sm-6">
+            @{
+                Html.RenderAction("ProductPatialView", product);
+            }
+        </div>
+                }
+        </div>
+</div>
+     
+        
+        
+        

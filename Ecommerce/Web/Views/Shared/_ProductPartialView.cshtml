@@ -1,0 +1,71 @@
+﻿@model BL.ViewModels.ProductViewModel
+<div class="product">
+    <div class="product-img">
+        <img src="~/Content/Imgs/Products/@Model.Photo" alt="this is photo">
+        <div class="product-label">
+            <span class="sale">-30%</span>
+            <span class="new">NEW</span>
+        </div>
+    </div>
+    <div class="product-body">
+        <p class="product-category">@Model.Brand.Name</p>
+        <h3 class="product-name"><a href="#">@Model.Name</a></h3>
+        @if (Model.Offer_Price != 0)
+        {
+            <h4 class="product-price">$ @Model.Offer_Price <del class="product-old-price">$ @Model.Price</del></h4>
+        }
+        else
+        {
+            <h4 class="product-price">$ @Model.Price </h4>
+        }
+
+        <div class="product-rating">
+
+            @{
+                int sum = 0;
+                int avarage = 0;
+
+            }
+            @for (int i = 0; i < Model.Ratings.Count(); i++)
+            {
+                sum += Model.Ratings[i].Rate;
+
+            }
+            @{
+                if (sum != 0) { avarage = sum / Model.Ratings.Count(); }
+
+
+
+            }
+            @for (int i = 0; i < avarage; i++)
+            {
+                <i class="fa fa-star"></i>
+            }
+
+
+        </div>
+        <div class="product-btns" onclick="fun(this)">
+            <input type="hidden" value="@Model.Id" id="productID" data-id="@Model.Id" />
+            @if (!User.Identity.IsAuthenticated)
+            {
+
+
+                <button class="add-to-wishlist"><i class="fa fa-heart-o" id="btnSave"></i><span class="tooltipp">add to wishlist</span></button>
+            }
+            else
+            {
+                Html.RenderAction("CheckWishList", new { product_id = Model.Id });
+
+            }
+
+
+
+
+
+        </div>
+        <a href="/Uproduct/details/@Model.Id" class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp"></span></a>
+    </div>
+    <div class="add-to-cart">
+        <button class="add-to-cart-btn" onclick="addToCart(@Model.Id)"><i class="fa fa-shopping-cart"></i> add to cart</button>
+    </div>
+</div>

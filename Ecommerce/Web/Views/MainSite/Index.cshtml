@@ -1,0 +1,286 @@
+﻿@using BL.ViewModels
+@model VariationOfProductsViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_MainSiteLayoutView.cshtml";
+
+
+
+}
+
+<div class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <!-- shop -->
+            @foreach (var vendor in Model.vendors)
+            {
+                <div class="col-md-4 col-xs-6">
+                    <div class="shop">
+                        <div class="shop-img">
+                            <img src="~/Content/Imgs/Users/@vendor.Photo" alt="">
+                        </div>
+                        <div class="shop-body">
+                            <h3>@vendor.FirstName @vendor.LastName<br> Store</h3>
+                            @Html.ActionLink("Shop now ", "GetProductByStore", new { vendorID = vendor.ID }, new { @class = "cta - btn" })<i class="fa fa-arrow-circle-right"></i>
+
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <!-- /shop -->
+            <!-- shop -->
+            <!-- /shop -->
+            <!-- shop -->
+            <!-- /shop -->
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /SECTION -->
+<!-- SECTION -->
+<div class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+
+            <!-- section title -->
+            <div class="col-md-12">
+                <div class="section-title">
+                    <h3 class="title">New Products</h3>
+                    <div class="section-nav">
+                        <ul class="section-tab-nav tab-nav">
+                            <li class="active"><a data-toggle="tab" href="#tab1">Laptops</a></li>
+                            <li><a data-toggle="tab" href="#tab1">Smartphones</a></li>
+                            <li><a data-toggle="tab" href="#tab1">Cameras</a></li>
+                            <li><a data-toggle="tab" href="#tab1">Accessories</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- /section title -->
+            <!-- Products tab & slick -->
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="products-tabs">
+                        <!-- tab -->
+                        <div id="tab1" class="tab-pane active">
+                            <div class="products-slick" data-nav="#slick-nav-1">
+                                <!-- product -->
+                                @foreach (var product in Model.ProductViewModels)
+                                {
+                                    Html.RenderAction("ProductPatialView", product);
+
+                                }
+
+                            </div>
+                            <div id="slick-nav-1" class="products-slick-nav"></div>
+                        </div>
+                        <!-- /tab -->
+                    </div>
+                </div>
+            </div>
+            <!-- Products tab & slick -->
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /SECTION -->
+<!-- HOT DEAL SECTION -->
+<div id="hot-deal" class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="hot-deal">
+                    <ul class="hot-deal-countdown">
+                        <li>
+                            <div>
+                                <h3>02</h3>
+                                <span>Days</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <h3>10</h3>
+                                <span>Hours</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <h3>34</h3>
+                                <span>Mins</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                <h3>60</h3>
+                                <span>Secs</span>
+                            </div>
+                        </li>
+                    </ul>
+                    <h2 class="text-uppercase">hot deal this week</h2>
+                    <p>New Collection Up to 50% OFF</p>
+                    <a class="primary-btn cta-btn" href="/cart">Shop now</a>
+                </div>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /HOT DEAL SECTION -->
+<!-- SECTION -->
+<div class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+
+            <!-- section title -->
+            <div class="col-md-12">
+                <div class="section-title">
+                    <h3 class="title">Top selling</h3>
+                    <div class="section-nav">
+                        <ul class="section-tab-nav tab-nav">
+                            <li class="active"><a data-toggle="tab" href="#tab2">Laptops</a></li>
+                            <li><a data-toggle="tab" href="#tab2">Smartphones</a></li>
+                            <li><a data-toggle="tab" href="#tab2">Cameras</a></li>
+                            <li><a data-toggle="tab" href="#tab2">Accessories</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- /section title -->
+            <!-- Products tab & slick -->
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="products-tabs">
+                        <!-- tab -->
+                        <div id="tab2" class="tab-pane fade in active">
+                            <div class="products-slick" data-nav="#slick-nav-2">
+                                @{
+                                    Model.ProductViewModels.Sort();
+                                }
+                                @foreach (var topproduct in Model.ProductViewModels)
+                                {
+                                    Html.RenderAction("ProductPatialView", topproduct);
+
+                                }
+                                <!-- product -->
+                                <!-- /product -->
+                            </div>
+                            <div id="slick-nav-2" class="products-slick-nav"></div>
+                        </div>
+                        <!-- /tab -->
+                    </div>
+                </div>
+            </div>
+            <!-- /Products tab & slick -->
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</div>
+<!-- /SECTION -->
+<!-- SECTION -->
+
+<!--this is modal for wishlist-->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Register First</h4>
+            </div>
+            <div class="modal-body">
+                <p>You should be authonticated to add to wishlist.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        function fun(elem) {
+
+            if (elem.children[1].children[0].classList.contains("fa-heart")) {
+
+                $.ajax(
+                    {
+                        type: 'post', //HTTP POST Method
+                        url: "/WishList/Delete", // Controller/View
+                        data: { //Passing data
+                            Product_Id: elem.children[0].getAttribute("data-id") //Reading text box values using Jquery
+
+                        }
+                        , success: function (result) {
+                            $el = elem.children[0]
+                            //$("#btnSave").attr("class", "textboxRight");
+                        //    $(elem.children[0]).find('i').removeClass("fa-heart")
+                            elem.children[1].children[0].classList.remove("fa-heart")
+                            elem.children[1].children[0].classList.add("fa-heart-o")
+                            let number = parseInt(document.getElementById('wish').textContent);
+                            number--;
+                            document.getElementById('wish').textContent = number;
+
+
+
+                        }
+                        , error: function (result) {
+                            console.log(result);
+                        }
+
+                    });
+            } else {
+
+                $.ajax(
+                    {
+                        type: 'post', //HTTP POST Method
+                        url: "/WishList/CreateWishList", // Controller/View
+                        data: { //Passing data
+                            Product_Id: elem.children[0].getAttribute("data-id") //Reading text box values using Jquery
+
+                        }
+                        , success: function (result) {
+                            if (result === "Register First") {
+                                $("#myModal").modal('show');
+                            } else {
+                              //  $(elem.children[0]).find('i').removeClass("fa-heart-o")
+                              //  $(elem.children[0]).find('i').addClass("fa-heart")
+                                elem.children[1].children[0].classList.remove("fa-heart-o")
+                                elem.children[1].children[0].classList.add("fa-heart")
+
+                                let number = parseInt(document.getElementById('wish').textContent);
+                                number++;
+                                document.getElementById('wish').textContent = number;
+                            }
+
+
+                        }
+                        , error: function (result) {
+                            console.log(result);
+                        }
+
+                    });
+            }
+
+        }
+  
+
+    </script>
+}
+
