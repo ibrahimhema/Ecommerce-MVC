@@ -1,5 +1,5 @@
 ﻿@model BL.ViewModels.LoginViewModel
-
+@using Web.Views.Shared
 @{
     ViewBag.Title = "Login";
     Layout = "~/Views/Shared/_MainSiteLayoutView.cshtml";
@@ -51,7 +51,7 @@
 
                     <div class="form-group">
                         <div class="col-md-offset-2 col-md-10">
-                            <input type="submit" value="Login" class="btn btn-default" />
+                            <input type="submit" value="@ResourceSite.Login" class="btn btn-default" />
                         </div>
                     </div>
                 </div>

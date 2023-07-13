@@ -1,20 +1,40 @@
-﻿
+﻿@using Web.Views.Shared
+@{ 
+    string lang = Session["SelectedCulture"].ToString();
+
+    var dir = (string)Session["SelectedCulture"] == "ar" ? "rtl" : "ltr";
+}
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="@lang" dir="@dir">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-    <title>Electro - HTML Ecommerce Template</title>
+    <title>@ResourceSite.AppName</title>
 
     <!-- Google font -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+    <style>
 
+      
+    </style>
     <!-- Bootstrap -->
     <link type="text/css" rel="stylesheet" href="~/Content/MainSite/css/bootstrap.min.css" />
+    @if (lang == "ar")
+    {
+        <!-- CSS -->
+        <!-- Latest compiled and minified CSS -->
 
+        <link type="text/css" rel="stylesheet" href="~/Content/MainSite/css/style-ar.css" />
+    }
+    else
+    {
+
+        <link type="text/css" rel="stylesheet" href="~/Content/MainSite/css/style.css" />
+    }
     <!-- Slick -->
     <link type="text/css" rel="stylesheet" href="~/Content/MainSite/css/slick.css" />
     <link type="text/css" rel="stylesheet" href="~/Content/MainSite/css/slick-theme.css" />
@@ -26,7 +46,8 @@
     <link rel="stylesheet" href="~/Content/MainSite/css/font-awesome.min.css">
 
     <!-- Custom stlylesheet -->
-    <link type="text/css" rel="stylesheet" href="~/Content/MainSite/css/style.css" />
+
+
     <link type="text/css" rel="stylesheet" href="~/Content/Site.css" />
     @RenderSection("styles", false)
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -35,7 +56,31 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <style>
 
+    </style>
+    <style>
+
+
+
+        .dropdown-content2 {
+            display: block;
+            position: absolute;
+            left: 157px;
+            top: 0px;
+            background-color: #f1f1f1;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        }
+
+            .dropdown-content2 a {
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                position: relative;
+                display: block;
+            }
+    </style>
 </head>
 <body>
     <!-- HEADER -->
@@ -57,12 +102,12 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="newsletter">
-                        <p>Sign Up for the <strong>NEWSLETTER</strong></p>
+                        <p>@ResourceSite.Sign_Up_for_the <strong>@ResourceSite.NEWSLETTER</strong></p>
                         <form>
-                            <input class="input" type="email" placeholder="Enter Your Email">
-                            <button class="newsletter-btn"><i class="fa fa-envelope"></i> Subscribe</button>
+                            <input class="input" type="email" placeholder="@ResourceSite.Enter_Your_Email">
+                            <button class="newsletter-btn"><i class="fa fa-envelope"></i> @ResourceSite.Subscribe</button>
                         </form>
-                        <ul class="newsletter-follow">
+                        <ul class="newsletter-follow" style="clear:both">
                             <li>
                                 <a href="#"><i class="fa fa-facebook"></i></a>
                             </li>
@@ -183,15 +228,211 @@
     <script src="~/Content/MainSite/js/jquery.min.js"></script>
 
     <script src="~/Content/MainSite/js/bootstrap.min.js"></script>
-    <script src="~/Content/MainSite/js/slick.min.js"></script>
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
     <script src="~/Content/MainSite/js/nouislider.min.js"></script>
     <script src="~/Content/MainSite/js/jquery.zoom.min.js"></script>
-    <script src="~/Content/MainSite/js/main.js"></script>
-    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
     <script src="~/Scripts/jquery.validate.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+    @if (lang == "ar")
+    {
+
+        <script src="~/Content/MainSite/js/slick-ar.min.js"></script>
+    }
+    else
+    {
+
+        <script src="~/Content/MainSite/js/slick.min.js"></script>
+    }
+
+
+
+    <script src="~/Content/MainSite/js/main.js"></script>
     <script src="~/Scripts/site.js"></script>
-    <script src="~/Scripts/site2.js"></script>
+    @*<script src="~/Scripts/site2.js"></script>*@
     @RenderSection("scripts", required: false)
+    <script>
+        function funcMouseOver(elem) {
+            $(elem).parent().siblings().children(".dropdown-content2").remove();
+            $(elem).siblings(".dropdown-content2").remove();
+
+            $.ajax({
+
+                url: '@Url.Action("getChildrens","MainSite")',
+                dataType: 'json',
+                data: { //Passing data
+                    id: $(elem).data("id") //Reading text box values using Jquery
+
+                },// request url
+
+                success: function (data, status, xhr) {// success callback function
+
+                    console.log(data.list);
+                    var floatingDiv = "<div class='dropdown-content2' onmouseover='funcMouseOverOnDiv(this)'>";
+                    var alink = "";
+                    data.list.forEach(function (item) {
+                        alink += "<a href='/@lang/MainSite/ShowProductByCategory/" + item.Id + "' data-id='" + item.Id + "' id='treeCat' onmouseover='funcMouseOver(this)' onmouseleave='funcMouseLeave(this)'>" + item.Name + "</a>";
+                    })
+                    floatingDiv += alink + "</div>";
+
+
+
+
+
+                    $(elem).parent().append(floatingDiv);
+
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback
+                    console.log(errorMessage);
+                }
+            });
+        }
+
+
+
+
+        $(".dropdown").click(function (e) {
+            $(".dropdown-content2").remove();
+        })
+
+
+    function addToCart(productId) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                let cartBadge = document.getElementById('cartBadge');
+                cartBadge.innerHTML = xhttp.responseText;
+                cartBadge.classList.add('qty');
+            }
+        };
+        xhttp.open("POST",'@Url.Action("AddToCart", "Cart") ', true);
+        var formData = new FormData();
+        formData.append("id", productId);
+        xhttp.send(formData);
+    }
+
+
+
+
+    function deleteFromCard(id) {
+        $('#' + id).fadeOut();
+        $("#bill_" + id).fadeOut();
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                let total = document.getElementById('order-total');
+                total.innerHTML = xhttp.responseText;
+                let cartBadge = document.getElementById('cartBadge');
+
+                if ((parseInt(cartBadge.innerHTML)) > 1) {
+                    cartBadge.innerHTML = parseInt(cartBadge.innerHTML) - 1;
+                }
+                else {
+                    cartBadge.innerHTML = "";
+                    cartBadge.classList.remove('qty');
+                    document.getElementById('order-submit').classList.add('disabled');
+                }
+            }
+        };
+        xhttp.open("POST",'@Url.Action("Remove", "Cart")');
+        var formData = new FormData();
+        formData.append("id", id);
+        xhttp.send(formData);
+    }
+     function fun(elem) {
+
+            if (elem.children[1].children[0].classList.contains("fa-heart")) {
+
+                $.ajax(
+                    {
+                        type: 'post', //HTTP POST Method
+                        url: "/@lang/WishList/Delete", // Controller/View
+                        data: { //Passing data
+                            Product_Id: elem.children[0].getAttribute("data-id") //Reading text box values using Jquery
+
+                        }
+                        , success: function (result) {
+                            $el = elem.children[0]
+                            //$("#btnSave").attr("class", "textboxRight");
+                            //    $(elem.children[0]).find('i').removeClass("fa-heart")
+                            elem.children[1].children[0].classList.remove("fa-heart")
+                            elem.children[1].children[0].classList.add("fa-heart-o")
+                            let number = parseInt(document.getElementById('wish').textContent);
+                            number--;
+                            document.getElementById('wish').textContent = number;
+
+
+
+                        }
+                        , error: function (result) {
+                            console.log(result);
+                        }
+
+                    });
+            } else {
+
+                $.ajax(
+                    {
+                        type: 'post', //HTTP POST Method
+                        url: "/@lang/WishList/CreateWishList", // Controller/View
+                        data: { //Passing data
+                            Product_Id: elem.children[0].getAttribute("data-id") //Reading text box values using Jquery
+
+                        }
+                        , success: function (result) {
+                            if (result === "Register First") {
+                                $("#myModal").modal('show');
+                            } else {
+                                //  $(elem.children[0]).find('i').removeClass("fa-heart-o")
+                                //  $(elem.children[0]).find('i').addClass("fa-heart")
+                                elem.children[1].children[0].classList.remove("fa-heart-o")
+                                elem.children[1].children[0].classList.add("fa-heart")
+
+                                let number = parseInt(document.getElementById('wish').textContent);
+                                number++;
+                                document.getElementById('wish').textContent = number;
+                            }
+
+
+                        }
+                        , error: function (result) {
+                            console.log(result);
+                        }
+
+                    });
+            }
+
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+
+
+
+
+            var down = false;
+
+            $('#bell').click(function (e) {
+
+                var color = $(this).text();
+                if (down) {
+
+
+                    $('#box').css('display', 'none');
+                    down = false;
+                } else {
+
+
+                    $('#box').css('display', 'block');
+                    down = true;
+
+                }
+
+            });
+
+        });
+    </script>
 </body>
 </html>

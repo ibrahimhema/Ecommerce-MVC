@@ -1,0 +1,133 @@
+﻿@model List<BL.ViewModels.ProductViewModel>
+@using Web.Views.Shared
+@using DAL.Model
+@{
+    ViewBag.Title = "GetAllProducts";
+    Layout = "~/Views/Shared/_MainSiteLayoutView.cshtml";
+    int pgNum = 0;
+    Pager pager = new Pager();
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pgNum = pager.CurrentPage;
+    }
+}
+<div class="container">
+    <div class="row">
+        @foreach (var product in Model)
+        {
+            <div class="col-md-3 col-sm-6">
+                <div class="product">
+                    <div class="product-img">
+                        <img src="~/Content/Imgs/Products/@product.Photo" alt="this is photo" width="200px">
+                        <div class="product-label">
+                            @if (product.Offer_Price != 0)
+                            {
+                                decimal dif = Math.Round(product.Price - product.Offer_Price);
+                                decimal y = dif * 100;
+                                int x = (int)(y / product.Price);
+                                <span class="sale">@x %</span>
+                            }
+                            else
+                            {
+                                <span class="sale">0%</span>
+                            }
+
+                            <span class="new">@ResourceSite.NEW</span>
+                        </div>
+                    </div>
+                    <div class="product-body">
+                        <p class="product-category">@product.Brand.Name</p>
+                        <h3 class="product-name"><a href="#">@product.Name</a></h3>
+                        @if (product.Offer_Price != 0)
+                        {
+                            <h4 class="product-price">$ @product.Offer_Price <del class="product-old-price">$ @product.Price</del></h4>
+                        }
+                        else
+                        {
+                            <h4 class="product-price">$ @product.Price </h4>
+                        }
+
+                        <div class="product-rating">
+
+                            @{
+                                int sum = 0;
+                                int avarage = 0;
+
+                            }
+                            @for (int i = 0; i < product.Ratings.Count(); i++)
+                            {
+                                sum += product.Ratings[i].Rate;
+
+                            }
+                            @{
+                                if (sum != 0) { avarage = sum / product.Ratings.Count(); }
+
+
+
+                            }
+                            @for (int i = 0; i < avarage; i++)
+                            {
+                                <i class="fa fa-star"></i>
+                            }
+
+
+                        </div>
+                        <div class="product-btns" onclick="fun(this)">
+                            <input type="hidden" value="@product.Id" id="productID" data-id="@product.Id" />
+                            @if (!User.Identity.IsAuthenticated)
+                            {
+
+
+                                <button class="add-to-wishlist"><i class="fa fa-heart-o" id="btnSave"></i><span class="tooltipp">@ResourceSite.add_to_wishlist</span></button>
+                            }
+                            else
+                            {
+
+                                <span>@ResourceSite.Profit<span style="color:greenyellow;font-size:larger">@product.Profit</span></span>
+
+                                Html.RenderAction("CheckWishList", new { product_id = product.Id });
+
+                            }
+
+
+
+
+
+                        </div>
+                        <a href="@Url.Action("details", "Uproduct",
+            new { id = product.Id })" class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp"></span></a>
+                    </div>
+                    <div class="add-to-cart">
+                        <button class="add-to-cart-btn" onclick="addToCart(@product.Id)"><i class="fa fa-shopping-cart"></i>@ResourceSite.add_to_cart</button>
+                    </div>
+                </div>
+            </div>
+                                }
+        </div>
+</div>
+
+
+
+
+
+@if (pager.TotalPages > 0)
+{
+<div class="text-center">
+    <ul class="pagination justify-content-center">
+        @for (int s = pager.StartPage; s <= pager.EndPage; s++)
+        {
+            <li class='page-item @(s == pager.CurrentPage ? "active" : "") '>
+                <a class="page-link" href="@Url.Action("GetAllProducts","Mainsite",new { pg=s})"> @s</a>
+
+                @*<a  asp-controller="MainSite" asp-action="GetAllJourneys" asp-route-pg="@s">@s</a>*@
+
+            </li>
+
+
+        }
+    </ul>
+</div>
+   
+}
+

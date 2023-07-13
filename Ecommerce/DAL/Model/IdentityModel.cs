@@ -3,6 +3,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Linq;
 using System.Text;
@@ -31,6 +32,8 @@ namespace DAL.Model
         public List<Order> Orders { get; set; }
 
         public List<Rating> Ratings { get; set; }
+      
+        public virtual List<Wallet> Wallets { set; get; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -46,10 +49,15 @@ namespace DAL.Model
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<Sub_Category> Sub_Categories { get; set; }
         public DbSet<WishList> WishLists { get; set; }
+        public DbSet<Wallet> Wallets { get; set; }
+        public DbSet<Notifiication> Notifiications { set; get; }
+        public DbSet<ProductImages> ProductImages { set; get; }
+        public DbSet<ProductSizes> ProductSizes { set; get; }
+        public DbSet<ProductColors> ProductColors { set; get; }
 
 
 
-        public ApplicationDbContext(): base("CS")
+        public ApplicationDbContext(): base(@"Data Source=.\SQLEXPRESS;Initial Catalog=Ecommerce;Integrated Security=True")
         {
         }
 
@@ -67,7 +75,7 @@ namespace DAL.Model
             modelBuilder.Entity<ApplicationUser>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
-
+       
         }
     }
 

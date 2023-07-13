@@ -1,7 +1,13 @@
 ﻿@model  List<DAL.Model.Sub_Category>
+@using Web.Views.Shared
 @using BL.Hlper
+@using BL.AppServices
 @{
     helper help = new helper();
+    NotificationAppService notificationAppService = new NotificationAppService();
+}
+@section styles{
+
 }
 <header>
     <!-- TOP HEADER -->
@@ -10,19 +16,23 @@
             @if (User.Identity.IsAuthenticated)
             {
                 <ul class="header-links pull-left">
-                    <li><a href="#"><i class="fa fa-envelope-o"></i> @User.Identity.Name</a></li>
+                    <li><a href="@Url.Action("Index","Profile")"><i class="fa fa-envelope-o"></i> @User.Identity.Name</a></li>
+                    <li><a href="@Url.Action("ChangeLangToArabic","MainSite")"><img src="~/Content/Imgs/eg-square-01.png" width="40px" height="20px" /></a></li>
+                    <li><a href="@Url.Action("ChangeLangToEnglish","MainSite")"><img src="~/Content/Imgs/USAFlag.png" width="40px" height="20px" /></a></li>
                 </ul>
                 <ul class="header-links pull-right">
-                    <li><a href="/Account/Logout">Logout</a></li>
+                    <li><a href="@Url.Action("Logout","Account")">@ResourceSite.Logout</a></li>
                 </ul>
             }
             else
             {
                 <ul class="header-links pull-left">
-                    <li><a href="/account/login">Login</a></li>
+                    <li><a href="@Url.Action("login","Account")">@ResourceSite.Login</a></li>
+                    <li><a href="@Url.Action("ChangeLangToArabic","MainSite")"><img src="~/Content/Imgs/eg-square-01.png" width="40px" height="20px" /></a></li>
+                    <li><a href="@Url.Action("ChangeLangToEnglish","MainSite")"><img src="~/Content/Imgs/USAFlag.png" width="40px" height="20px" /></a></li>
                 </ul>
                 <ul class="header-links pull-right">
-                    <li><a href="/account/register">Register</a></li>
+                    <li><a href="@Url.Action("register","Account")">@ResourceSite.Register</a></li>
                 </ul>
             }
         </div>
@@ -38,78 +48,144 @@
                 <div class="col-md-3">
                     <div class="header-logo">
                         <a href="#" class="logo">
-                            <img src="./img/logo.png" alt="">
+                            <img src="~/Content/MainSite/img/logo.png" alt="">
                         </a>
                     </div>
+                    <!--Notifcation-->
+                    <div class="icon" id="bell"> <img src="https://i.imgur.com/AC7dgLA.png" alt=""> </div>
+                    <div class="notifications" id="box">
+                        <h2>Notifications - <span>@notificationAppService.GetNotifiicationCount()</span></h2>
+                        @* @foreach (var noti in notificationAppService.GetAllNotifiication())
+        {
+            <div class="notifications-item">
+                <i class="fa fa-bell"></i>
+                <div class="text">
+                    <h4>@noti.Desc</h4>
+                    <p><a href="@Url.Action("details","Uproduct",new { id=noti.ProductId})">@ResourceSite.Show</a></p>
                 </div>
-                <!-- /LOGO -->
-                <!-- SEARCH BAR -->
-                <div class="col-md-6">
-                    <div class="header-search">
-                        <form action="/MainSite/Search" method="post">
-                            @Html.AntiForgeryToken()
-
-                            <select class="input-select" name="SubCatId">
-                                <option value="0">All Categories</option>
-                                @foreach (var cat in Model)
-                                {
-                                    <option value=@cat.Id>@cat.Name</option>
-                                }
-                            </select>
-                            @Html.ValidationMessage("SubCatId")
-                            <input class="input" placeholder="Search here" name="SearchText" required>
-                            @Html.ValidationMessage("SearchText")
-                            <button type="submit" class="search-btn">Search</button>
-                        </form>
-                    </div>
-                </div>
-                <!-- /SEARCH BAR -->
-                <!-- ACCOUNT -->
-                <div class="col-md-3 clearfix">
-                    <div class="header-ctn">
-                        <!-- Wishlist -->
-                        <div>
-                            <a href="/MainSite/ShowWishList">
-                                <i class="fa fa-heart-o"></i>
-                                <span>Your Wishlist</span>
-                                <div id="wish" class="qty">@ViewBag.wish</div>
-                            </a>
-                        </div>
-                        <!-- /Wishlist -->
-                        <!-- Cart -->
-                        <div class="dropdown">
-                            <a href="/Cart">
-                                <i class="fa fa-shopping-cart"></i>
-                                <span>Your Cart</span>
-                                @* Number of products added to the cart *@
-                                @if (@ViewBag.cartCount == null || @ViewBag.cartCount == 0)
-                                {
-                                    <div id="cartBadge"></div>
-                                }
-                                else
-                                {
-                                    <div class="qty" id="cartBadge">@ViewBag.cartCount</div>
-                                }
-                            </a>
-                        </div>
-                        <!-- /Cart -->
-                        <!-- Menu Toogle -->
-                        <div class="menu-toggle">
-                            <a href="#">
-                                <i class="fa fa-bars"></i>
-                                <span>Menu</span>
-                            </a>
-                        </div>
-                        <!-- /Menu Toogle -->
-                    </div>
-                </div>
-                <!-- /ACCOUNT -->
             </div>
-            <!-- row -->
+        }*@
+                        <div class="notifications-item">
+                            <i class="fa fa-bell"></i>
+                            <div class="text">
+                                <h4>dddddddddddddddddddddddddddddddddddd</h4>
+                                <p><a href="#">@ResourceSite.Show</a></p>
+                            </div>
+                        </div>
+                        <div class="notifications-item">
+                            <i class="fa fa-bell"></i>
+                            <div class="text">
+                                <h4>dddddddddddddddddddddddddddddddddddd</h4>
+                                <p><a href="#">@ResourceSite.Show</a></p>
+                            </div>
+                        </div>
+                        <div class="notifications-item">
+                            <i class="fa fa-bell"></i>
+                            <div class="text">
+                                <h4>dddddddddddddddddddddddddddddddddddd</h4>
+                                <p><a href="#">@ResourceSite.Show</a></p>
+                            </div>
+                        </div>
+                        <div class="notifications-item">
+                            <i class="fa fa-bell"></i>
+                            <div class="text">
+                                <h4>dddddddddddddddddddddddddddddddddddd</h4>
+                                <p><a href="#">@ResourceSite.Show</a></p>
+                            </div>
+                        </div>
+                        <div class="notifications-item">
+                            <i class="fa fa-bell"></i>
+                            <div class="text">
+                                <h4>dddddddddddddddddddddddddddddddddddd</h4>
+                                <p><a href="#">@ResourceSite.Show</a></p>
+                            </div>
+                        </div>
+                        <div class="notifications-item">
+                            <i class="fa fa-bell"></i>
+                            <div class="text">
+                                <h4>dddddddddddddddddddddddddddddddddddd</h4>
+                                <p><a href="#">@ResourceSite.Show</a></p>
+                            </div>
+                        </div>
+                        <div class="notifications-item">
+                            <i class="fa fa-bell"></i>
+                            <div class="text">
+                                <h4>dddddddddddddddddddddddddddddddddddd</h4>
+                                <p><a href="#">@ResourceSite.Show</a></p>
+                            </div>
+                        </div>
+
+                    </div>
+                        <!--End Notifaction-->
+                    </div>
+                    <!-- /LOGO -->
+                    <!-- SEARCH BAR -->
+                    <div class="col-md-6">
+                        <div class="header-search">
+                            <form action="@Url.Action("Search","MainSite")" method="post">
+                                @Html.AntiForgeryToken()
+
+                                <select class="input-select" name="SubCatId">
+                                    <option value="0">@ResourceSite.All_Categories</option>
+                                    @foreach (var cat in Model)
+                                    {
+                                        <option value=@cat.Id>@cat.Name</option>
+                                    }
+                                </select>
+                                @Html.ValidationMessage("SubCatId")
+                                <input class="input" placeholder="@ResourceSite.Search_here" name="SearchText" required>
+                                @Html.ValidationMessage("SearchText")
+                                <button type="submit" class="search-btn">@ResourceSite.Search</button>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- /SEARCH BAR -->
+                    <!-- ACCOUNT -->
+                    <div class="col-md-3 clearfix">
+                        <div class="header-ctn">
+                            <!-- Wishlist -->
+                            <div>
+                                <a href="@Url.Action("ShowWishList", "MainSite")">
+                                    <i class="fa fa-heart-o"></i>
+                                    <span>@ResourceSite.Your_Wishlist</span>
+                                    <div id="wish" class="qty">@ViewBag.wish</div>
+                                </a>
+                            </div>
+                            <!-- /Wishlist -->
+                            <!-- Cart -->
+                            <div class="dropdown">
+                                <a href="@Url.Action("Index","Cart")">
+                                    <i class="fa fa-shopping-cart"></i>
+                                    <span>@ResourceSite.Your_Cart</span>
+                                    @* Number of products added to the cart *@
+                                    @if (@ViewBag.cartCount == null || @ViewBag.cartCount == 0)
+                                    {
+                                        <div id="cartBadge"></div>
+                                    }
+                                    else
+                                    {
+                                        <div class="qty" id="cartBadge">@ViewBag.cartCount</div>
+                                    }
+                                </a>
+                            </div>
+                            <!-- /Cart -->
+                            <!-- Menu Toogle -->
+                            <div class="menu-toggle">
+                                <a href="#">
+                                    <i class="fa fa-bars"></i>
+                                    <span>@ResourceSite.Menu</span>
+                                </a>
+                            </div>
+                            <!-- /Menu Toogle -->
+                        </div>
+                    </div>
+                    <!-- /ACCOUNT -->
+                </div>
+                <!-- row -->
+            </div>
+            <!-- container -->
         </div>
-        <!-- container -->
-    </div>
-    <!-- /MAIN HEADER -->
+        <!-- /MAIN HEADER -->
 </header>
 
 <nav id="navigation">
@@ -119,7 +195,7 @@
         <div id="responsive-nav">
             <!-- NAV -->
             <ul class="main-nav nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li>
+                <li class="active"><a href="@Url.Action("Index","MainSite")">@ResourceSite.Home</a></li>
 
 
                 @foreach (var firstChild in Model)
@@ -132,7 +208,9 @@
                             {
                                 <li>
 
-                                    @Html.ActionLink(sub.Name, "ShowProductByCategory", new { sub_cat_id = sub.Id })
+
+                                    <a href="@Url.Action("ShowProductByCategory","MainSite",new { id=@sub.Id})" data-id="@sub.Id" id="treeCat" onmouseover="funcMouseOver(this)" onmouseleave="funcMouseLeave(this)">@sub.Name</a>
+
                                 </li>
                             }
                         </ul>
@@ -152,3 +230,12 @@
     </div>
     <!-- /container -->
 </nav>
+
+@section scripts{
+   
+
+
+}
+
+
+

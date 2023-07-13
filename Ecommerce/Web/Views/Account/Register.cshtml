@@ -1,4 +1,5 @@
 ﻿@model BL.ViewModels.RegisterViewModel
+@using Web.Views.Shared
 @using DAL.Model
 
 @{
@@ -89,13 +90,14 @@
                 <div class="col-md-10">
                     <span>
                         <input type="radio" id="User" name="Role" value="User" checked>
-                        <label for="User">User</label>
+                        <label for="User">@ResourceSite.User</label>
                     </span>
 
                     <span style="margin-left: 3rem">
                         <input type="radio" id="Vendor" name="Role" value="Vendor">
-                        <label for="Vendor">Vendor</label>
+                        <label for="Vendor">@ResourceSite.Vendor</label>
                     </span>
+                  
                     @Html.ValidationMessageFor(model => model.Role, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -104,7 +106,7 @@
 
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Create" class="btn btn-default" />
+                    <input type="submit" value="@ResourceSite.Register" class="btn btn-default" />
                 </div>
             </div>
         </div>

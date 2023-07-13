@@ -21,7 +21,7 @@ namespace DAL.Model
         public int Product_Id { get; set; }
 
         public Order Order { get; set; }
-        public Product Product { get; set; }
+        public virtual Product Product { get; set; }
 
 
 

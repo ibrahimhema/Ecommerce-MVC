@@ -1,4 +1,5 @@
 ﻿using BL.Bases;
+using BL.ViewModels;
 using DAL.Model;
 using System;
 using System.Collections.Generic;
@@ -69,5 +70,14 @@ namespace BL.AppServices
             return TheUnitOfWork.SubCategory.CheckSubCategoryExists(subcategory);
         }
         #endregion
+        public List<ProductViewModel> GetBroductsBySubCat(int Subid)
+        {
+            return Mapper.Map<List<ProductViewModel>>(TheUnitOfWork.Product.GetWhere(p=>p.Sub_Cat_Id==Subid).ToList());
+        }
+        public List<Sub_Category> GetSubCatByMainCatId(int MainCatid)
+        {
+          
+            return Mapper.Map<List<Sub_Category>>(TheUnitOfWork.SubCategory.GetWhere(s => s.Cat_Id == MainCatid).ToList());
+        }
     }
 }

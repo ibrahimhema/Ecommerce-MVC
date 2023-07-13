@@ -1,4 +1,5 @@
 ﻿@using BL.ViewModels
+@using Web.Views.Shared
 @model ProductDetailsViewModel
 
 @{
@@ -13,7 +14,7 @@
         <!-- row -->
         <div class="row">
             <!-- Product main img -->
-            <div class="col-md-5 col-md-push-2">
+            <div class="col-md-5">
                 <div id="product-main-img">
                     <div class="product-preview">
                         <img src="~/Content/Imgs/Products/@Model.product.Photo" alt="">
@@ -21,7 +22,7 @@
                 </div>
             </div>
 
-            <div class="col-md-2  col-md-pull-5">
+            <div class="col-md-2">
                 <div id="product-imgs">
                     <div class="product-preview">
                         <img src="~/Content/Imgs/Products/@Model.product.Photo" alt="">
@@ -45,11 +46,11 @@
                                 <i class="fa fa-star-o"></i>
                             }
                         </div>
-                        <a class="review-link" href="#">@ViewBag.count Review(s) | Add your review</a>
+                        <a class="review-link" href="#">@ViewBag.count @ResourceSite.Review | @ResourceSite.Add_your_review</a>
                     </div>
                     <div>
                         <h3 class="product-price">$@Model.product.Offer_Price <del class="product-old-price">$@Model.product.Price</del></h3>
-                        <span class="product-available">In Stock</span>
+                        <span class="product-available">@ResourceSite.In_Stock</span>
                     </div>
                     <p>
                         @Model.product.Desc
@@ -57,9 +58,9 @@
 
                     <div class="product-options">
                         <div class="qty-label">
-                            Vendor Name :
+                            @ResourceSite.Vendor_Name :
                             <span style="color:blue">@Model.product.Vendor_Name</span> |
-                            Qty Avaiable Now :
+                           @ResourceSite.Qty_Avaiable_Now :
                             <span style="color:blue">@Model.product.Quantity</span>
 
                         </div>
@@ -76,16 +77,16 @@
                             Qty
                             <div class="input-number">
                                 <input type="number">-->
-                                <!--<span class="qty-up">+</span>
-                                <span class="qty-down">-</span>-->
-                            <!--</div>
+                        <!--<span class="qty-up">+</span>
+                        <span class="qty-down">-</span>-->
+                        <!--</div>
                         </div>-->
-                        <button class="add-to-cart-btn" onclick="addToCart(@Model.product.Id)"><i class="fa fa-shopping-cart"></i> add to cart</button>
+                        <button class="add-to-cart-btn" onclick="addToCart(@Model.product.Id)"><i class="fa fa-shopping-cart"></i>@ResourceSite.add_to_cart</button>
                     </div>
 
                     <!--<ul class="product-btns">
                         <li><a href="#"><i class="fa fa-heart-o"></i> add to wishlist</a></li>-->
-                        <!--<li><a href="#"><i class="fa fa-exchange"></i> add to compare</a></li>-->
+                    <!--<li><a href="#"><i class="fa fa-exchange"></i> add to compare</a></li>-->
                     <!--</ul>-->
 
                     <ul class="product-links">
@@ -110,9 +111,9 @@
                 <div id="product-tab">
                     <!-- product tab nav -->
                     <ul class="tab-nav">
-                        <li class="active"><a data-toggle="tab" href="#tab1">Description</a></li>
-                        <li><a data-toggle="tab" href="#tab2">Details</a></li>
-                        <li><a data-toggle="tab" href="#tab3">Reviews (@ViewBag.count)</a></li>
+                        <li class="active"><a data-toggle="tab" href="#tab1">@ResourceSite.Description</a></li>
+                        <li><a data-toggle="tab" href="#tab2">@ResourceSite.Details</a></li>
+                        <li><a data-toggle="tab" href="#tab3">@ResourceSite.Review (@ViewBag.count)</a></li>
                     </ul>
                     <!-- /product tab nav -->
                     <!-- product tab content -->
@@ -132,11 +133,11 @@
                         <div id="tab2" class="tab-pane fade in">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <p>Vendor : @Model.product.Vendor_Name</p>
-                                    <p> Reviews for @Model.product.Name: (@ViewBag.count) Review(s)</p>
-                                    <p>Price : @Model.product.Price | Offer price : @Model.product.Offer_Price </p>
-                                    <p>Sell Count: @Model.product.Sell_Count</p>
-                                    <p>Product Rate According to Customers : @ViewBag.pres</p>
+                                    <p>@ResourceSite.Vendor_Name : @Model.product.Vendor_Name</p>
+                                    <p> @ResourceSite.Review for @Model.product.Name: (@ViewBag.count) @ResourceSite.Review</p>
+                                    <p>@ResourceSite.Price : @Model.product.Price | @ResourceSite.Offer_price : @Model.product.Offer_Price </p>
+                                    <p>@ResourceSite.Sell_Count: @Model.product.Sell_Count</p>
+                                    <p>@ResourceSite.Product_Rate_According_to_Customers : @ViewBag.pres</p>
                                 </div>
                             </div>
                         </div>
@@ -274,13 +275,13 @@
                                 <!-- Review Form -->
                                 <div class="col-md-3">
                                     <div id="review-form">
-                                        <form class="review-form" method="post" action="/uproduct/AddRate">
+                                        <form class="review-form" method="post" action='@Url.Action("AddRate","uproduct")'>
                                             <input type="hidden" name="Product_Id" value="@Model.product.Id">
-                                            <input class="input" type="text" placeholder="Your Name">
-                                            <input class="input" type="email" placeholder="Your Email">
-                                            <textarea class="input" name="Comment" placeholder="Your Review"></textarea>
+                                            <input class="input" type="text" placeholder="@ResourceSite.Your_Name">
+                                            <input class="input" type="email" placeholder="@ResourceSite.Enter_Your_Email">
+                                            <textarea class="input" name="Comment" placeholder="@ResourceSite.Your_Review"></textarea>
                                             <div class="input-rating">
-                                                <span>Your Rating: </span>
+                                                <span>@ResourceSite.Your_Rating: </span>
                                                 <div class="stars">
                                                     <input id="star5" name="Rate" value="5" type="radio"><label for="star5"></label>
                                                     <input id="star4" name="Rate" value="4" type="radio"><label for="star4"></label>
@@ -289,7 +290,7 @@
                                                     <input id="star1" name="Rate" value="1" type="radio"><label for="star1"></label>
                                                 </div>
                                             </div>
-                                            <button class="primary-btn">Submit</button>
+                                            <button class="primary-btn">@ResourceSite.Submit</button>
                                         </form>
                                     </div>
                                 </div>
@@ -317,24 +318,25 @@
 
             <div class="col-md-12">
                 <div class="section-title text-center">
-                    <h3 class="title">Related Products</h3>
+                    <h3 class="title">@ResourceSite.Related_Products</h3>
                 </div>
             </div>
 
             <!-- product -->
-            @foreach (var product in Model.products)
-            {
-                <div class="col-md-3 col-xs-6">
-                    @{
-                        Html.RenderAction("ProductPatialView", "MainSite", product);
-                    }
+            <div style="margin-top:80px">
 
-                </div>
+                @{
+                    Html.RenderPartial("_SlickPrtialView", Model.products);
+                }
+            </div>
 
 
 
 
-            }
+
+
+
+
 
 
         </div>
@@ -352,7 +354,7 @@
                 $.ajax(
                     {
                         type: 'post', //HTTP POST Method
-                        url: "/WishList/Delete", // Controller/View
+                        url: '@Url.Action("Delete", "WishList")', // Controller/View
                         data: { //Passing data
                             Product_Id: elem.children[0].getAttribute("data-id") //Reading text box values using Jquery
 
@@ -380,7 +382,7 @@
                 $.ajax(
                     {
                         type: 'post', //HTTP POST Method
-                        url: "/WishList/CreateWishList", // Controller/View
+                        url: '@Url.Action("CreateWishList", "WishList")', // Controller/View
                         data: { //Passing data
                             Product_Id: elem.children[0].getAttribute("data-id") //Reading text box values using Jquery
 

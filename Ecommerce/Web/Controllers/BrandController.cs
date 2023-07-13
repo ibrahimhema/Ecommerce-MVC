@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace Web.Controllers
 {
-    public class BrandController : Controller
+    public class BrandController : BaseController
     {
         // GET: Brand
         readonly BrandAppService Brands = new BrandAppService();

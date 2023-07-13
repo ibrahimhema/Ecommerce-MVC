@@ -1,0 +1,280 @@
+﻿@model BL.ViewModels.ProfileViewModel
+    @using BL.ViewModels
+    @using Web.Views.Shared
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_MainSiteLayoutView.cshtml";
+    List<CheckOutViewModel> checkOuts = (List<CheckOutViewModel>)ViewBag.orders;
+}
+
+@section styles {
+    <link rel="stylesheet" href="~/Content/profileStyles.css" />
+}
+
+<div class="container">
+    <div class="row" style="height: 200px;margin:50px">
+        <div class="col-sm-4 h-100">
+            <img src="~/Content/Imgs/Users/@Model.Photo" class="rounded-circle h-100" style="max-height:260px"/>
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="col-12">
+            <div class="card profile-container">
+                <div class="card-body" style="padding:20px">
+
+                    <div class="row ">
+                        <div class="col-12">
+                            <ul class="nav nav-tabs heading" id="myTab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active"
+                                       id="basicInfo-tab"
+                                       data-toggle="tab"
+                                       href="#basicInfo"
+                                       role="tab"
+                                       aria-controls="basicInfo"
+                                       aria-selected="true">@ResourceSite.Account_Info</a>
+                                </li>
+                                @if (Model.Role == "Vendor")
+                                {
+
+                                    <li class="nav-item">
+                                        <a class="nav-link"
+                                           id="connectedServices-tab"
+                                           data-toggle="tab"
+                                           href="#connectedServices"
+                                           role="tab"
+                                           aria-controls="connectedServices"
+                                           aria-selected="false">@ResourceSite.PRODUCT</a>
+                                    </li>
+                                }
+                                @if (Model.Role == "Admin")
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link btn btn-primary"
+                                           href="@Url.Action("Index","Admin")"
+                                           role="tab">@ResourceSite.Admin_Dashboard</a>
+                                    </li>
+                                }
+                                @if (Model.Role == "User")
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link"
+                                           id="connectedServices-tab"
+                                           data-toggle="tab"
+                                           href="#connectedServices"
+                                           role="tab"
+                                           aria-controls="connectedServices"
+                                           aria-selected="false">Orders</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link"
+                                           id="connectedServices2-tab"
+                                           data-toggle="tab"
+                                           href="#connectedServices2"
+                                           role="tab"
+                                           aria-controls="connectedServices2"
+                                           aria-selected="false">Wallet</a>
+                                    </li>
+                                }
+                            </ul>
+                            <div class="tab-content ml-1" id="myTabContent">
+                                <div class="tab-pane fade show active"
+                                     id="basicInfo"
+                                     role="tabpanel"
+                                     aria-labelledby="basicInfo-tab">
+                                    <div class="row" style="margin-top:10px">
+                                        <div class="col-sm-3 col-md-2 col-5">
+                                            <label style="font-weight: bold">@ResourceSite.Full_Name</label>
+                                        </div>
+                                        <div class="col-md-8 col-6">@Model.FirstName @Model.LastName</div>
+                                    </div>
+                                    <hr />
+
+                                    <div class="row">
+                                        <div class="col-sm-3 col-md-2 col-5">
+                                            <label style="font-weight: bold">@ResourceSite.Email</label>
+                                        </div>
+                                        <div class="col-md-8 col-6">@Model.Email</div>
+                                    </div>
+                                    <hr />
+
+                                    <div class="row">
+                                        <div class="col-sm-3 col-md-2 col-5">
+                                            <label style="font-weight: bold">@ResourceSite.Username</label>
+                                        </div>
+                                        <div class="col-md-8 col-6">@Model.Username</div>
+                                    </div>
+                                    <hr />
+                                    <div class="row">
+                                        <div class="col-sm-3 col-md-2 col-5">
+                                            <label style="font-weight: bold">@ResourceSite.Account_Type</label>
+                                        </div>
+                                        <div class="col-md-8 col-6">@Model.Role</div>
+                                    </div>
+                                    <hr />
+                                    <div class="row">
+                                        <div class="col-sm-3 col-md-2 col-5">
+                                            <label style="font-weight: bold">@ResourceSite.Address</label>
+                                        </div>
+                                        <div class="col-md-8 col-6">@Model.Address</div>
+                                    </div>
+                                    <hr />
+                                    <a class="btn btn-primary" href="~/Account/Edit">@ResourceSite.Update_Personal_Info</a>
+                                    <hr />
+                                </div>
+                                @if (Model.Role == "Vendor")
+                                {
+                                    <div class="tab-pane fade"
+                                         id="connectedServices"
+                                         role="tabpanel"
+                                         aria-labelledby="ConnectedServices-tab">
+
+                                        <a class="btn btn-primary" style="margin-bottom:1rem" href="/Product/Create">Add New Product</a>
+
+                                        <table class="table">
+                                            <tr>
+                                                <th>
+                                                    @ResourceSite.PRODUCT
+                                                </th>
+                                                <th>
+                                                    In Stock
+                                                </th>
+                                                <th>
+                                                    Sold
+                                                </th>
+                                                <th></th>
+                                            </tr>
+
+                                            @foreach (var item in ViewBag.products)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @item.Name
+                                                    </td>
+                                                    <td>
+                                                        @item.Quantity
+                                                    </td>
+                                                    <td>
+                                                        @item.Sell_Count
+                                                    </td>
+                                                    <td>
+                                                        @Html.ActionLink(ResourceSite.Details, "details", "Uproduct", new { id = @item.Id }, null)
+                                                    </td>
+                                                </tr>
+                                            }
+
+                                        </table>
+
+
+                                    </div>
+                                }
+                                @if (Model.Role == "User")
+                                {
+                                    <div class="tab-pane fade"
+                                         id="connectedServices"
+                                         role="tabpanel"
+                                         aria-labelledby="ConnectedServices-tab">
+
+                                        <table class="table">
+                                            <tr>
+                                                <th>
+                                                    Order Id
+                                                </th>
+                                                <th>
+                                                    @ResourceSite.Price
+                                                </th>
+                                                <th>
+                                                    @ResourceSite.Order_Date
+                                                </th>
+                                                <th>
+                                                    @ResourceSite.Address
+                                                </th>
+                                                <th>
+                                                    @ResourceSite.order_Stutes
+                                                </th>
+                                            </tr>
+
+                                            @foreach (var item in ViewBag.orders)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @item.Id
+                                                    </td>
+                                                    <td>
+                                                        @item.Total_Price
+                                                    </td>
+                                                    <td>
+                                                        @item.Created_at
+                                                    </td>
+                                                    <td>
+                                                        @item.Address
+                                                    </td>
+                                                    <td>
+                                                        @item.Status
+                                                    </td>
+                                                </tr>
+                                            }
+
+                                        </table>
+
+
+                                    </div>
+                                    <!--cdfdfdf-->
+                                    <div class="tab-pane fade"
+                                         id="connectedServices2"
+                                         role="tabpanel"
+                                         aria-labelledby="ConnectedServices2-tab">
+
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <div class="card text-center" style="width:100%">
+                                                    <div class="card-body" style="padding:30px">
+                                                        <h5 class="card-title">@ResourceSite.The_Balance</h5>
+                                                        <p class="card-text">@Model.Wallets.FirstOrDefault().my_balance @Model.Wallets.FirstOrDefault().currunce</p>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="card text-center" style="width:100%">
+                                                    <div class="card-body" style="padding:30px">
+                                                        <h5 class="card-title">@ResourceSite.Withrawn_Balance</h5>
+                                                        <p class="card-text">@Model.Wallets.FirstOrDefault().withdrawn_balance @Model.Wallets.FirstOrDefault().currunce</p>
+                                                        <a href="#" class="btn btn-primary">@ResourceSite.Withdraw</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="card text-center" style="width:100%">
+                                                    <div class="card-body" style="padding:30px">
+                                                        <h5 class="card-title">@ResourceSite.Deliverd_Orders</h5>
+                                                        <p class="card-text">@checkOuts.Where(o=>o.Status==DAL.Model.Order_Status.Delivered).Count()</p>
+                                                     
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <!--dcdcd-->
+
+
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+}

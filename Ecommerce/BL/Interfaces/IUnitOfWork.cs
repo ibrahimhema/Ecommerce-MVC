@@ -22,8 +22,11 @@ namespace BL.Interfaces
         SubCategoryRespository SubCategory { get; }
 
         WishListRepository WishList { get; }
-
-        ProductSizeRepositoty ProductSizeRepositoty { get; }
+       CheckOutRepository CheckOut { get; }
+        OrderDetailsRepository OrderDetails { get; }
+        PaymentRepository Payment { get; }
+        WalletReposatory Wallet { get;}
+        NotificationReposatory Notification { get; }
 
         ProductImagesRepositoty ProductImagesRepositoty { get; }
         ProductColorRepositoty ProductColorRepositoty { get; }

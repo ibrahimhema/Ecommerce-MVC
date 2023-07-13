@@ -8,12 +8,12 @@ using BL.ViewModels;
 
 namespace Web.Controllers
 {
-    public class UproductController : Controller
+    public class UproductController : BaseController
     {
         // GET: Uproduct
         ProductAppService ProductAppService = new ProductAppService();
-      
-        AccountAppService accountAppService = new AccountAppService();
+        WishListAppService wishListAppService = new WishListAppService();
+          AccountAppService accountAppService = new AccountAppService();
         SubCategoryAppService subCategoryAppService = new SubCategoryAppService();
         RatingAppService ratingAppService = new RatingAppService();
         public ActionResult details(int id)
@@ -68,6 +68,21 @@ namespace Web.Controllers
             productDetails.product = prod;
             productDetails.products = products.ToList();
             return View(productDetails);
+        }
+        public ActionResult ProductPatialView(ProductViewModel productView)
+        {
+            return PartialView("_ProductPartialView", productView);
+        }
+        public ActionResult CheckWishList(int product_id)
+        {
+            string id = accountAppService.Find(User.Identity.Name).Id;
+
+            int count = wishListAppService.GetAllWishList().Where(w => w.Product_Id == product_id && w.User_Id == id).Count();
+            if (count == 0)
+                return PartialView("_CheckWishListView", false);
+            else
+                return PartialView("_CheckWishListView", true);
+
         }
         public ActionResult AddRate(RatingViewModel ratingViewModel)
         {

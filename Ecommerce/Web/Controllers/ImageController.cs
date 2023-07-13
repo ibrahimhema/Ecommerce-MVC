@@ -20,5 +20,6 @@ namespace Web.Controllers
 
             return $"/Content/Imgs/Temp/{imageUploaderService.GetImageName()}";
         }
+        
     }
 }

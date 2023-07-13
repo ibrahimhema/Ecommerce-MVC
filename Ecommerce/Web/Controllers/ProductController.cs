@@ -26,12 +26,12 @@ namespace Web.Controllers
         public ActionResult Index()
         {
             var products = ProductAppService.GetAllBroducts();
-            foreach (var item in products)
+          /*  foreach (var item in products)
             {
                 item.Brand = BrandAppService.GetBrand(item.Brand_Id);
                 item.Vendor_Name = accountAppService.FindById(item.Vendor_User_id).UserName;
                 item.Sub_Category = subCategoryAppService.GetSubCategory(item.Sub_Cat_Id);
-            }
+            }*/
 
 
 
@@ -39,9 +39,9 @@ namespace Web.Controllers
         }
         public ActionResult CreateProduct()
         {
-            //ViewData["Brands"] = BrandAppService.GetAllBrand();
-            ViewData["Brands"] = new List<BrandViewModel>();
-            // ViewData["Vendors"] = accountAppService.GetUserByRole(Role_Name.Vendor);
+            ViewData["Brands"] = BrandAppService.GetAllBrand();
+         ViewData["Vendors"] = accountAppService.GetAllVendors();
+            ViewData["subCategory"] = subCategoryAppService.GetAllSubCategories();
             return View();
         }
         [HttpPost]
@@ -54,6 +54,9 @@ namespace Web.Controllers
                 ImageUploaderService imageUploaderService = new ImageUploaderService(imageFile, Directories.Products);
                 productViewModel.Photo = imageUploaderService.GetImageName();
                 imageUploaderService.SaveImage();
+                if (productViewModel.Offer_Price>0) {
+                    productViewModel.Profit = productViewModel.Price - productViewModel.Offer_Price;
+                }
                 ProductAppService.SaveNewBroduct(productViewModel);
 
 
@@ -80,6 +83,10 @@ namespace Web.Controllers
             {
                 ImageUploaderService imageUploaderService = new ImageUploaderService(imageFile, Directories.Products);
                 productViewModel.Photo = imageUploaderService.GetImageName();
+                if (productViewModel.Offer_Price > 0)
+                {
+                    productViewModel.Profit = productViewModel.Price - productViewModel.Offer_Price;
+                }
                 ProductAppService.UpdateBroduct(productViewModel);
                 imageUploaderService.SaveImage();
                 TempData["success"] = "Success Update Product";

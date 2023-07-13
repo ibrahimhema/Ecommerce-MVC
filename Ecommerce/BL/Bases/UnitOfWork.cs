@@ -97,6 +97,50 @@ namespace BL.Bases
                 return rating;
             }
         }
+        private CheckOutRepository checkOut;
+        public CheckOutRepository CheckOut
+        {
+            get
+            {
+                checkOut = checkOut ?? new CheckOutRepository(EC_Context);
+                return checkOut;
+            }
+        }
+        private OrderDetailsRepository orderDetails;
+        public OrderDetailsRepository OrderDetails
+        {
+            get
+            {
+                orderDetails = orderDetails ?? new OrderDetailsRepository(EC_Context);
+                return orderDetails;
+            }
+        }
+        private PaymentRepository payment;
+        public PaymentRepository Payment
+        {
+            get
+            {
+                payment = payment ?? new PaymentRepository(EC_Context);
+                return payment;
+            }
+        }
+        public WalletReposatory wallet;
+        public WalletReposatory Wallet
+        {
+            get
+            {
+                wallet = wallet ?? new WalletReposatory(EC_Context);
+                return wallet;
+            }
+        }
+        private NotificationReposatory notification;
+        public NotificationReposatory Notification
+        {
+            get
+            {
+              return notification = notification ?? new NotificationReposatory(EC_Context);
+            }
+        }
 
         // Main_CatRepository IUnitOfWork.mainCategory => throw new NotImplementedException();
         #endregion

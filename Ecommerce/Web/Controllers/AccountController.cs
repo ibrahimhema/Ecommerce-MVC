@@ -13,11 +13,12 @@ using System.Web.Mvc;
 
 namespace Web.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
 
         //Account service 
         readonly AccountAppService accountAppService = new AccountAppService();
+         readonly WalletAppService walletAppService = new WalletAppService();
         
         
         public ActionResult Register() => View();
@@ -42,7 +43,9 @@ namespace Web.Controllers
             if (result.Succeeded)
             {
                 imageUploader.SaveImage();
-                
+
+                var user = accountAppService.FindByEmailAndPassword(newUser.Email, newUser.PasswordHash);
+                walletAppService.SaveNewWallet(new Wallet { User_Id=user.Id});
                 IAuthenticationManager owinManager = HttpContext.GetOwinContext().Authentication;
                 //SignIn
 
@@ -50,13 +53,15 @@ namespace Web.Controllers
                     new ApplicationUserManager(),owinManager
                     );
 
-                var user = accountAppService.FindByEmailAndPassword(newUser.Email, newUser.PasswordHash);
                 //assign role to user
                 accountAppService.AssignToRole(user.Id, newUser.Role);
 
                 //checkbox for rememberMe
+              
                 signInManager.SignIn(user, newUser.RememberMe,newUser.RememberMe);
-                return RedirectToAction("Index","Home");
+            
+
+                return RedirectToAction("Index","MainSite");
             }
             else
             {
@@ -117,8 +122,52 @@ namespace Web.Controllers
             Session["cart"] = null;
             return RedirectToAction("Index", "Mainsite");
         }
-        
 
+        [Authorize]
+        public ActionResult Edit()
+        {
+            ProfileEditViewModel user = accountAppService.GetForEdit(User.Identity.Name);
+            return View(user);
+        }
+
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult Edit(ProfileEditViewModel userInfo, HttpPostedFileBase imageFile)
+        {
+            ImageUploaderService imageUploaderService;
+            var user = accountAppService.Find(User.Identity.Name);
+
+            if (imageFile != null)
+            {
+                imageUploaderService = new ImageUploaderService(imageFile, Directories.Users);
+                //delete old image if its not the default
+                if (user.Photo.Contains("default"))
+                {
+                    ImageUploaderService.DeleteImage(user.Photo, Directories.Users);
+                }
+                //save new image name to user
+                user.Photo = imageUploaderService.GetImageName();
+                //save new image to serve
+                imageUploaderService.SaveImage();
+            }
+
+            user.Address = userInfo.Address;
+            user.FirstName = userInfo.FirstName;
+            user.LastName = userInfo.LastName;
+
+            var result = accountAppService.Edit(user);
+
+            if (result.Succeeded)
+            {
+                ImageUploaderService.RecreateFolder(Directories.Temp);
+                return RedirectToAction("Index", "Profile");
+            }
+            else
+            {
+                return View(userInfo);
+            }
+        }
 
     }
 }

@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace Web.Controllers
 {
-    public class CartController : Controller
+    public class CartController : BaseController
     {
         ProductAppService products = new ProductAppService();
         // GET: Cart

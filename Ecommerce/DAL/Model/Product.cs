@@ -33,7 +33,8 @@ namespace DAL.Model
 
         [DefaultValue(false)]
         public bool Active { get; set; }
-
+        [DefaultValue(0)]
+        public decimal Profit { get; set; }
         [DataType(DataType.DateTime)]
         public DateTime Created_at { get; set; }
         public string Vendor_User_id { get; set; }
@@ -55,6 +56,9 @@ namespace DAL.Model
 
         public List<Order_Product> Orders { get; set; }
         public virtual List<Rating> Ratings { get; set; }
+        public virtual List<ProductImages> ProductImages  { get; set; }
+        public virtual List<ProductColors> ProductColors  { get; set; }
+        public virtual List<ProductSizes> ProductSizes { get; set; }
 
 
     }
