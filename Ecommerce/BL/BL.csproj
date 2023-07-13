@@ -66,6 +66,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppServices\AccountAppService.cs" />
+    <Compile Include="AppServices\ProductImagesAppService.cs" />
+    <Compile Include="AppServices\ProductColorAppService.cs" />
+    <Compile Include="AppServices\ProductSizeAppService.cs" />
     <Compile Include="AppServices\BrandAppService.cs" />
     <Compile Include="AppServices\ImageUploaderService.cs" />
     <Compile Include="AppServices\Main_CatAppService.cs" />
@@ -85,6 +88,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Repositories\AccountRepository.cs" />
+    <Compile Include="Repositories\ProductImagesRepositoty.cs" />
+    <Compile Include="Repositories\ProductColorRepositoty.cs" />
+    <Compile Include="Repositories\ProductSizeRepositoty.cs" />
     <Compile Include="Repositories\BrandRepositoty.cs" />
     <Compile Include="Repositories\Main_CatRepository.cs" />
     <Compile Include="Repositories\ProductRepository.cs" />
@@ -97,6 +103,9 @@
     <Compile Include="ViewModels\Item.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\ProductDetailsViewModel.cs" />
+    <Compile Include="ViewModels\ProductImagesDTO.cs" />
+    <Compile Include="ViewModels\ProductColorDTO.cs" />
+    <Compile Include="ViewModels\ProductSizeDTO.cs" />
     <Compile Include="ViewModels\ProductViewModel.cs" />
     <Compile Include="ViewModels\RatingViewModel.cs" />
     <Compile Include="ViewModels\RegisterViewModel.cs" />

@@ -17,8 +17,9 @@ namespace BL.Repositories
         }
         public List<Product> GetAllBroducts()
         {
-           
-            return GetAll().ToList();
+
+            //return GetAll().ToList();
+            return new List<Product>();
         }
 
         public bool InsertBroduct(Product product)

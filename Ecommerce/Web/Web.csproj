@@ -269,6 +269,7 @@
     <Content Include="bin\Web.dll" />
     <Content Include="bin\Web.pdb" />
     <Content Include="bin\WebGrease.dll" />
+    <Content Include="Content\Admin\assets\css\gig.css" />
     <Content Include="Content\Admin\assets\css\material-dashboard.css" />
     <Content Include="Content\Admin\assets\css\material-dashboard.min.css" />
     <Content Include="Content\Admin\assets\demo\demo.css" />
@@ -289,6 +290,7 @@
     <Content Include="Content\Admin\assets\js\core\bootstrap-material-design.min.js" />
     <Content Include="Content\Admin\assets\js\core\jquery.min.js" />
     <Content Include="Content\Admin\assets\js\core\popper.min.js" />
+    <Content Include="Content\Admin\assets\js\gig.js" />
     <Content Include="Content\Admin\assets\js\material-dashboard.js" />
     <Content Include="Content\Admin\assets\js\material-dashboard.min.js" />
     <Content Include="Content\Admin\assets\js\plugins\bootstrap-notify.js" />
