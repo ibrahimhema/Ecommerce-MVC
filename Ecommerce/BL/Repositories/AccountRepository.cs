@@ -1,6 +1,7 @@
 ﻿using BL.AppServices;
 using DAL.Model;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -14,10 +15,12 @@ namespace BL.Repositories
     public class AccountRepository//: BaseRepository<ApplicationUserIdentity>
     {
         readonly ApplicationUserManager manager;
+        readonly ApplicationRoleManager roleManager;
 
         public AccountRepository(DbContext db)
         {
             manager = new ApplicationUserManager(db);
+            roleManager = new ApplicationRoleManager(db);
         }
 
 
@@ -47,6 +50,11 @@ namespace BL.Repositories
 
         public IdentityResult AssignToRole (string userId, string roleName)
         {
+            if (!roleManager.RoleExists(roleName))
+            {
+                roleManager.Create(new IdentityRole(roleName));
+            }
+           
             return manager.AddToRole(userId, roleName);
         }
 
@@ -90,6 +98,13 @@ namespace BL.Repositories
             }
             return retval;
         }
-
+        public IdentityResult Edit(ApplicationUser user)
+        {
+            return manager.Update<ApplicationUser, string>(user);
+        }
+        public string GetRoleByUserId(string userId)
+        {
+            return manager.GetRoles(userId).FirstOrDefault();
+        }
     }
 }

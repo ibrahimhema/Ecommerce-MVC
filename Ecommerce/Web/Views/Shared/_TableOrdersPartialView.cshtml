@@ -1,0 +1,35 @@
+﻿
+@model IEnumerable<BL.ViewModels.CheckOutViewModel>
+@using BL.AppServices
+@{ 
+    AccountAppService accountAppService = new AccountAppService();
+}
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Total_Price)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Address)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Created_at)
+        </td>
+        <td>
+            @accountAppService.FindById(item.User_Id).UserName
+        </td>
+        <td>
+            @accountAppService.GetRoleByUserId(item.User_Id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Payment_Id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Status)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+        </td>
+    </tr>
+}

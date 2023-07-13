@@ -160,13 +160,16 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\BrandController.cs" />
     <Compile Include="Controllers\CartController.cs" />
+    <Compile Include="Controllers\CheckOutController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Controllers\MainCategoryController.cs" />
     <Compile Include="Controllers\MainSiteController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\SubCategoryController.cs" />
     <Compile Include="Controllers\UproductController.cs" />
@@ -177,6 +180,21 @@
     <Compile Include="obj\Debug\.NETFramework,Version=v4.7.2.AssemblyAttributes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup1.cs" />
+    <Compile Include="Views\Shared\ResourceSite.ar.Designer.cs">
+      <DependentUpon>ResourceSite.ar.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Views\Shared\ResourceSite.fr.Designer.cs">
+      <DependentUpon>ResourceSite.fr.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Views\Shared\ResourceSite.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ResourceSite.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="bin\Antlr3.Runtime.dll" />
@@ -299,10 +317,13 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Imgs\default.jpg" />
+    <Content Include="Content\Imgs\eg-square-01.png" />
+    <Content Include="Content\Imgs\egypt-flag-icon.png" />
     <Content Include="Content\Imgs\Products\1.jpg" />
     <Content Include="Content\Imgs\Products\default.jpg" />
     <Content Include="Content\Imgs\Sub_Categories\d2be7f98-e2eb-40f7-8380-930682489dad.jpg" />
     <Content Include="Content\Imgs\Sub_Categories\default.jpg" />
+    <Content Include="Content\Imgs\USAFlag.png" />
     <Content Include="Content\Imgs\Users\1.jpg" />
     <Content Include="Content\Imgs\Users\7524c347-fcdf-4359-8fba-e9c1d2f8aaa9.jpg" />
     <Content Include="Content\MainSite\css\bootstrap.min.css" />
@@ -310,6 +331,7 @@
     <Content Include="Content\MainSite\css\nouislider.min.css" />
     <Content Include="Content\MainSite\css\slick-theme.css" />
     <Content Include="Content\MainSite\css\slick.css" />
+    <Content Include="Content\MainSite\css\style-ar.css" />
     <Content Include="Content\MainSite\css\style.css" />
     <Content Include="Content\MainSite\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\MainSite\fonts\slick.svg" />
@@ -332,7 +354,9 @@
     <Content Include="Content\MainSite\js\jquery.zoom.min.js" />
     <Content Include="Content\MainSite\js\main.js" />
     <Content Include="Content\MainSite\js\nouislider.min.js" />
+    <Content Include="Content\MainSite\js\slick-ar.min.js" />
     <Content Include="Content\MainSite\js\slick.min.js" />
+    <Content Include="Content\profileStyles.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -615,12 +639,22 @@
     <Content Include="Views\Cart\Index.cshtml" />
     <Content Include="Views\Uproduct\details.cshtml" />
     <Content Include="Views\Shared\_CheckWishListView.cshtml" />
+    <Content Include="Views\Shared\_ProductsPartialView.cshtml" />
+    <Content Include="Views\CheckOut\Edit.cshtml" />
+    <Content Include="Views\CheckOut\Index.cshtml" />
+    <Content Include="Views\Profile\Index.cshtml" />
+    <Content Include="Views\Shared\_SlickPrtialView.cshtml" />
+    <Content Include="Views\Account\Edit.cshtml" />
+    <Content Include="Views\Shared\_TableOrdersPartialView.cshtml" />
+    <Content Include="Views\Shared\ModelBodyForOrderDetailsPartialView.cshtml" />
+    <Content Include="Views\MainSite\GetAllProducts.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\Imgs\Temp\" />
     <Folder Include="Models\" />
     <Folder Include="obj\Debug\TempPE\" />
+    <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -644,6 +678,20 @@
       <Project>{6902cd36-2756-403e-abe7-15af2f0f475c}</Project>
       <Name>DAL</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Shared\ResourceSite.ar.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResourceSite.ar.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Shared\ResourceSite.fr.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResourceSite.fr.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Shared\ResourceSite.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResourceSite.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -1,8 +1,11 @@
 ﻿@model IEnumerable<BL.ViewModels.Item>
-
+@using Web.Views.Shared
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_MainSiteLayoutView.cshtml";
+    var payment_Method = 1;
+
+
 
 }
 
@@ -15,10 +18,10 @@
         <!-- row -->
         <div class="row">
             <div class="col-md-12">
-                <h3 class="breadcrumb-header">Cart</h3>
+                <h3 class="breadcrumb-header">@ResourceSite.Your_Cart</h3>
                 <ul class="breadcrumb-tree">
-                    <li><a href="/mainsite">Home</a></li>
-                    <li class="active">Cart</li>
+                    <li><a href="@Url.Action("Index","MainSite")">@ResourceSite.Home</a></li>
+                    <li class="active">@ResourceSite.Your_Cart</li>
                 </ul>
             </div>
         </div>
@@ -66,7 +69,7 @@
                 }
                 else
                 {
-                    <h3 class="title">Your Cart is empty add more products now!</h3>
+                    <h3 class="title">@ResourceSite.Your_Cart_is_empty</h3>
                 }
 
                 <!-- cart Details end-->
@@ -75,16 +78,17 @@
             <!-- Order Details -->
             <div class="col-md-5 order-details">
                 <div class="section-title text-center">
-                    <h3 class="title">Your Order</h3>
+                    <h3 class="title">@ResourceSite.Your_Order</h3>
                 </div>
                 <div class="order-summary">
                     <div class="order-col">
-                        <div><strong>PRODUCT</strong></div>
-                        <div><strong>Price</strong></div>
+                        <div><strong>@ResourceSite.PRODUCT</strong></div>
+                        <div><strong>@ResourceSite.Price</strong></div>
                     </div>
                     <div class="order-products">
                         @if (ViewBag.emptyCart == null)
                         {
+
 
                             foreach (var item in Model)
                             {
@@ -97,61 +101,74 @@
 
                     </div>
                     <div class="order-col">
-                        <div>Shiping</div>
-                        <div><strong>FREE</strong></div>
+                        <div>@ResourceSite.Shiping</div>
+                        <div><strong>@ResourceSite.FREE</strong></div>
                     </div>
                     <div class="order-col">
-                        <div><strong>TOTAL</strong></div>
+                        <div><strong>@ResourceSite.TOTAL</strong></div>
                         <div><strong class="order-total" id="order-total">@ViewBag.total</strong></div>
                     </div>
                 </div>
-                <div class="payment-method">
-                    <div class="input-radio">
-                        <input type="radio" name="payment" id="payment-1">
-                        <label for="payment-1">
-                            <span></span>
-                            Direct Bank Transfer
-                        </label>
-                        <div class="caption">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+
+                <form action="@Url.Action("AddCheckOut","CheckOut")" method="POST">
+                    <input type="hidden" name="Total_Price" id="Total_Price" value=@ViewBag.total />
+                    <div class="payment-method">
+                        <div class="input-radio">
+                            <input type="radio" name="payment" id="payment-1" value="1" checked>
+                            <label for="payment-1">
+                                <span></span>
+                               @ResourceSite.Cash
+                            </label>
+
+                        </div>
+                        <div class="input-radio">
+                            <input type="radio" name="payment" id="payment-2" value="0">
+                            <label for="payment-2">
+                                <span></span>
+                              @ResourceSite.Visa
+                            </label>
+
+                        </div>
+                        <div class="input-radio">
+                            <input type="radio" name="payment" id="payment-3" value="2">
+                            <label for="payment-3">
+                                <span></span>
+                                @ResourceSite.PayPal
+                            </label>
+
                         </div>
                     </div>
-                    <div class="input-radio">
-                        <input type="radio" name="payment" id="payment-2">
-                        <label for="payment-2">
+                    <div class="input-checkbox">
+                        <input type="checkbox" id="terms">
+                        <label for="terms">
                             <span></span>
-                            Cheque Payment
+                            I've read and accept the <a href="#">terms & conditions</a>
                         </label>
-                        <div class="caption">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                        </div>
                     </div>
-                    <div class="input-radio">
-                        <input type="radio" name="payment" id="payment-3">
-                        <label for="payment-3">
-                            <span></span>
-                            Paypal System
-                        </label>
-                        <div class="caption">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                        </div>
+                    <div>
+                        <input type="text" name="Address" id="Address" placeholder="@ResourceSite.Enter_Address" required class="form-control" />
+
                     </div>
-                </div>
-                <div class="input-checkbox">
-                    <input type="checkbox" id="terms">
-                    <label for="terms">
-                        <span></span>
-                        I've read and accept the <a href="#">terms & conditions</a>
-                    </label>
-                </div>
-                @if (ViewBag.emptyCart == null)
-                {
-                    <a href="/Checkout" class="primary-btn order-submit" id="order-submit">Place order</a>
-                }
-                else
-                {
-                    <a href="/Checkout" class="primary-btn order-submit disabled" id="order-submit">Place order</a>
-                }
+                    @if (ViewBag.emptyCart == null)
+                    {
+
+
+                        if (User.Identity.IsAuthenticated)
+                        {
+                            <input type="submit" value="@ResourceSite.Place_order" class="primary-btn order-submit form-control" , id="order-submit" style="width:100%;" />
+                        }
+                        else
+                        {
+                            @Html.ActionLink(@ResourceSite.Place_order, "Login", "Account", new { ReturnUrl = "~/Cart" }, new { @class = "primary-btn order-submit", id = "order-submit" })
+                        }
+                    }
+                    else
+                    {
+                        @Html.ActionLink(@ResourceSite.Place_order, "Index", "CheckOut", new { }, new { @class = "primary-btn order-submit disabled", id = "order-submit" })
+
+                        <!-- <a href="#" class="primary-btn order-submit disabled" id="order-submit">Place order</a>-->
+                    }
+                    </form>
             </div>
             <!-- /Order Details -->
         </div>
@@ -160,3 +177,6 @@
     <!-- /container -->
 </div>
 <!-- /SECTION -->
+<script>
+
+</script>

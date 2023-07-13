@@ -9,7 +9,7 @@ using System.Web.Mvc;
 namespace Web.Controllers
 {
     [Authorize(Roles ="Admin")]
-    public class MainCategoryController : Controller
+    public class MainCategoryController : BaseController
     {
         readonly Main_CatAppService main_CatApp = new Main_CatAppService();
         // GET: MainCategory

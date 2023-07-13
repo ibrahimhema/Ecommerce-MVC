@@ -1,9 +1,13 @@
 ﻿@using BL.ViewModels
+@using Web.Views.Shared
+@using BL.AppServices
 @model VariationOfProductsViewModel
 
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_MainSiteLayoutView.cshtml";
+    Main_CatAppService mainCat = new Main_CatAppService();
+    string lang = Session["SelectedCulture"].ToString();
 
 
 
@@ -23,8 +27,8 @@
                             <img src="~/Content/Imgs/Users/@vendor.Photo" alt="">
                         </div>
                         <div class="shop-body">
-                            <h3>@vendor.FirstName @vendor.LastName<br> Store</h3>
-                            @Html.ActionLink("Shop now ", "GetProductByStore", new { vendorID = vendor.ID }, new { @class = "cta - btn" })<i class="fa fa-arrow-circle-right"></i>
+                            <h3>@vendor.FirstName @vendor.LastName<br> @ResourceSite.Store</h3>
+                            @Html.ActionLink(@ResourceSite.Shop_now, "GetProductByStore", new { vendorID = vendor.ID }, new { @class = "cta - btn" })<i class="fa fa-arrow-circle-right"></i>
 
                         </div>
                     </div>
@@ -52,13 +56,18 @@
             <!-- section title -->
             <div class="col-md-12">
                 <div class="section-title">
-                    <h3 class="title">New Products</h3>
+                    <h3 class="title">@ResourceSite.New_Products</h3>
                     <div class="section-nav">
                         <ul class="section-tab-nav tab-nav">
-                            <li class="active"><a data-toggle="tab" href="#tab1">Laptops</a></li>
-                            <li><a data-toggle="tab" href="#tab1">Smartphones</a></li>
-                            <li><a data-toggle="tab" href="#tab1">Cameras</a></li>
-                            <li><a data-toggle="tab" href="#tab1">Accessories</a></li>
+                            <li class="active"><a href="@Url.Action("GetAllProducts","MainSite",new { pg=1})">Show All</a></li>
+                            @for (int i = 0; i < mainCat.GetAllMain_Category().Count(); i++)
+                            {
+                               
+
+                                    <li><a data-normalortopsale="N" data-toggle="tab" href="#tab1" onclick="funcGetProductInMainCategory(@mainCat.GetAllMain_Category()[i].Id,this)">@mainCat.GetAllMain_Category()[i].Name</a></li>
+                                
+                            }
+
                         </ul>
                     </div>
                 </div>
@@ -70,7 +79,7 @@
                     <div class="products-tabs">
                         <!-- tab -->
                         <div id="tab1" class="tab-pane active">
-                            <div class="products-slick" data-nav="#slick-nav-1">
+                            <div class="products-slick divAppendedN" data-nav="#slick-nav-1">
                                 <!-- product -->
                                 @foreach (var product in Model.ProductViewModels)
                                 {
@@ -86,11 +95,13 @@
                 </div>
             </div>
             <!-- Products tab & slick -->
+        
         </div>
         <!-- /row -->
     </div>
     <!-- /container -->
 </div>
+
 <!-- /SECTION -->
 <!-- HOT DEAL SECTION -->
 <div id="hot-deal" class="section">
@@ -126,9 +137,10 @@
                             </div>
                         </li>
                     </ul>
-                    <h2 class="text-uppercase">hot deal this week</h2>
+                    <h2 class="text-uppercase">@ResourceSite.hot_deal_this_week</h2>
                     <p>New Collection Up to 50% OFF</p>
-                    <a class="primary-btn cta-btn" href="/cart">Shop now</a>
+                  
+                    @Html.ActionLink(@ResourceSite.Shop_now, "Index", "cart", null, new { @class = "primary-btn cta-btn" })
                 </div>
             </div>
         </div>
@@ -147,13 +159,25 @@
             <!-- section title -->
             <div class="col-md-12">
                 <div class="section-title">
-                    <h3 class="title">Top selling</h3>
+                    <h3 class="title">@ResourceSite.Top_selling</h3>
                     <div class="section-nav">
                         <ul class="section-tab-nav tab-nav">
-                            <li class="active"><a data-toggle="tab" href="#tab2">Laptops</a></li>
-                            <li><a data-toggle="tab" href="#tab2">Smartphones</a></li>
-                            <li><a data-toggle="tab" href="#tab2">Cameras</a></li>
-                            <li><a data-toggle="tab" href="#tab2">Accessories</a></li>
+                            @for (int i = 0; i < mainCat.GetAllMain_Category().Count(); i++)
+                            {
+                                if (i == 0)
+                                {
+
+
+                                    <li class="active"><a data-normalortopsale="T" data-toggle="tab" href="#tab2" onclick="funcGetProductInMainCategory(@mainCat.GetAllMain_Category()[i].Id,this)">@mainCat.GetAllMain_Category()[i].Name</a></li>
+                                }
+                                else
+                                {
+
+                                    <li><a data-normalortopsale="T" data-toggle="tab" href="#tab2" onclick="funcGetProductInMainCategory(@mainCat.GetAllMain_Category()[i].Id,this)">@mainCat.GetAllMain_Category()[i].Name</a></li>
+                                }
+                            }
+
+
                         </ul>
                     </div>
                 </div>
@@ -165,7 +189,7 @@
                     <div class="products-tabs">
                         <!-- tab -->
                         <div id="tab2" class="tab-pane fade in active">
-                            <div class="products-slick" data-nav="#slick-nav-2">
+                            <div class="products-slick divAppendedT" data-nav="#slick-nav-2">
                                 @{
                                     Model.ProductViewModels.Sort();
                                 }
@@ -184,6 +208,8 @@
                 </div>
             </div>
             <!-- /Products tab & slick -->
+         
+
         </div>
         <!-- /row -->
     </div>
@@ -191,7 +217,6 @@
 </div>
 <!-- /SECTION -->
 <!-- SECTION -->
-
 <!--this is modal for wishlist-->
 <div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -200,13 +225,13 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Register First</h4>
+                <h4 class="modal-title">@ResourceSite.Register_First</h4>
             </div>
             <div class="modal-body">
-                <p>You should be authonticated to add to wishlist.</p>
+                <p>@ResourceSite.You_should_be_authonticated.</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@ResourceSite.Close</button>
             </div>
         </div>
 
@@ -215,71 +240,55 @@
 
 @section scripts{
     <script>
-        function fun(elem) {
 
-            if (elem.children[1].children[0].classList.contains("fa-heart")) {
+        function funcGetProductInMainCategory(mainCatId, elem) {
 
+            console.log(elem);
+
+            console.log($(elem).data("normalortopsale"));
+            if ($(elem).data("normalortopsale") == "N") {
                 $.ajax(
                     {
-                        type: 'post', //HTTP POST Method
-                        url: "/WishList/Delete", // Controller/View
+                        type: 'get', //HTTP POST Method
+                        url: "@Url.Action("ProductByMainCatIdPartialView", "MainSite")", // Controller/View
                         data: { //Passing data
-                            Product_Id: elem.children[0].getAttribute("data-id") //Reading text box values using Jquery
+                            mainCatId: mainCatId //Reading text box values using Jquery
+                            , Type: "N"
+                        }, success: function (result) {
+                            $("#tab1 .slick-track").empty();
 
+
+
+                            $('#tab1 .products-slick').slick('slickAdd', result);
+
+
+                        }, error: function (error) {
+                            console.log(error)
                         }
-                        , success: function (result) {
-                            $el = elem.children[0]
-                            //$("#btnSave").attr("class", "textboxRight");
-                        //    $(elem.children[0]).find('i').removeClass("fa-heart")
-                            elem.children[1].children[0].classList.remove("fa-heart")
-                            elem.children[1].children[0].classList.add("fa-heart-o")
-                            let number = parseInt(document.getElementById('wish').textContent);
-                            number--;
-                            document.getElementById('wish').textContent = number;
-
-
-
-                        }
-                        , error: function (result) {
-                            console.log(result);
-                        }
-
                     });
             } else {
 
                 $.ajax(
                     {
-                        type: 'post', //HTTP POST Method
-                        url: "/WishList/CreateWishList", // Controller/View
+                        type: 'get', //HTTP POST Method
+                        url: "@Url.Action("ProductByMainCatIdPartialView", "MainSite")", // Controller/View
                         data: { //Passing data
-                            Product_Id: elem.children[0].getAttribute("data-id") //Reading text box values using Jquery
+                            mainCatId: mainCatId //Reading text box values using Jquery
+                            , Type: "T"
+                        }, success: function (result) {
+                            $("#tab2 .slick-track").empty();
+
+
+
+                            $('#tab2 .products-slick').slick('slickAdd', result);
+                        }, error: function (error) {
 
                         }
-                        , success: function (result) {
-                            if (result === "Register First") {
-                                $("#myModal").modal('show');
-                            } else {
-                              //  $(elem.children[0]).find('i').removeClass("fa-heart-o")
-                              //  $(elem.children[0]).find('i').addClass("fa-heart")
-                                elem.children[1].children[0].classList.remove("fa-heart-o")
-                                elem.children[1].children[0].classList.add("fa-heart")
-
-                                let number = parseInt(document.getElementById('wish').textContent);
-                                number++;
-                                document.getElementById('wish').textContent = number;
-                            }
-
-
-                        }
-                        , error: function (result) {
-                            console.log(result);
-                        }
-
                     });
             }
 
+            //divAppended
         }
-  
 
     </script>
 }

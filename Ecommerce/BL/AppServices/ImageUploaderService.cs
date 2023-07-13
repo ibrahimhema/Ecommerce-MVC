@@ -5,7 +5,8 @@ using System.Web;
 
 namespace BL.AppServices
 {
-    public enum Directories {
+    public enum Directories
+    {
         Users,
         Products,
         Sub_Categories,
@@ -23,7 +24,7 @@ namespace BL.AppServices
 
         public ImageUploaderService(HttpPostedFileBase file, Directories dir)
         {
-            if (file != null)
+            if (file != null && file.ContentLength > 0)
             {
                 string fullPath;
                 fullPath = HttpContext.Current.Server.MapPath(("~/Content/Imgs/" + dir.ToString()));
@@ -33,7 +34,7 @@ namespace BL.AppServices
                 }
 
                 string[] extention = System.IO.Path.GetFileName(file.FileName).Split('.');
-                FileName = Guid.NewGuid().ToString()+"."+extention[extention.Length-1];
+                FileName = Guid.NewGuid().ToString() + "." + extention[extention.Length - 1];
                 ImageFile = file;
                 FilePath = System.IO.Path.Combine(HttpContext.Current.Server.MapPath(("~/Content/Imgs/" + dir.ToString())), FileName);
             }
@@ -50,12 +51,13 @@ namespace BL.AppServices
 
         public void SaveImage()
         {
-            ImageFile.SaveAs(FilePath);
+            if (FilePath != null)
+                ImageFile.SaveAs(FilePath);
         }
 
         public static void DeleteImage(string fileName, Directories dir)
         {
-            var fullPath = HttpContext.Current.Server.MapPath(("~/Content/Imgs/"+dir.ToString()+fileName));
+            var fullPath = HttpContext.Current.Server.MapPath(("~/Content/Imgs/" + dir.ToString() + fileName));
 
             if (System.IO.File.Exists(fullPath))
             {
@@ -65,7 +67,7 @@ namespace BL.AppServices
 
         public static void RecreateFolder(Directories dir)
         {
-            var fullPath = HttpContext.Current.Server.MapPath(("~/Content/Imgs/"+dir.ToString()));
+            var fullPath = HttpContext.Current.Server.MapPath(("~/Content/Imgs/" + dir.ToString()));
 
             if (System.IO.Directory.Exists(fullPath))
             {
@@ -84,9 +86,9 @@ namespace BL.AppServices
     }
 
 
-   
-    
 
-    
+
+
+
 
 }

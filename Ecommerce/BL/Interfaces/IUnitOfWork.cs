@@ -22,7 +22,11 @@ namespace BL.Interfaces
         SubCategoryRespository SubCategory { get; }
 
         WishListRepository WishList { get; }
-        
+       CheckOutRepository CheckOut { get; }
+        OrderDetailsRepository OrderDetails { get; }
+        PaymentRepository Payment { get; }
+        WalletReposatory Wallet { get;}
+        NotificationReposatory Notification { get; }
 
         int Commit();
     }

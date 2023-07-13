@@ -10,6 +10,7 @@ namespace BL.ViewModels
    public class VariationOfProductsViewModel
     {
      public List<ProductViewModel> ProductViewModels { set; get; }
+        
         public List<AdminDisplayUserViewModel> vendors { set; get; }
 
     }

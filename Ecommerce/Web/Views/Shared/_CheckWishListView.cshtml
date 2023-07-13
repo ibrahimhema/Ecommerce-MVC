@@ -1,8 +1,9 @@
-﻿@if (Model == true)
+﻿@using Web.Views.Shared
+@if (Model == true)
 {
-    <button class="add-to-wishlist"><i class="fa fa-heart"  id="btnSave" ></i><span class="tooltipp">add to wishlist</span></button>
+    <button class="add-to-wishlist"><i class="fa fa-heart" id="btnSave"></i><span class="tooltipp">@ResourceSite.add_to_wishlist</span></button>
 }
 else
 {
-    <button class="add-to-wishlist"><i class="fa fa-heart-o" id="btnSave"></i><span class="tooltipp">add to wishlist</span></button>
+    <button class="add-to-wishlist"><i class="fa fa-heart-o" id="btnSave"></i><span class="tooltipp">@ResourceSite.add_to_wishlist</span></button>
 }

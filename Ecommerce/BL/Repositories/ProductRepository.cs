@@ -20,7 +20,16 @@ namespace BL.Repositories
            
             return GetAll().ToList();
         }
+        public int GetAllBroductsCount()
+        {
 
+            return GetAll().Count();
+        }
+        public IQueryable<Product> GetAllBroductsByParts(int skip,int take)
+        {
+
+            return GetAll().OrderBy(p=>p.Id).Skip(skip).Take(take);
+        }
         public bool InsertBroduct(Product product)
         {
             return Insert(product);

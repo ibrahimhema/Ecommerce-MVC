@@ -1,10 +1,22 @@
 ﻿@model BL.ViewModels.ProductViewModel
+@using Web.Views.Shared
 <div class="product">
     <div class="product-img">
         <img src="~/Content/Imgs/Products/@Model.Photo" alt="this is photo">
         <div class="product-label">
-            <span class="sale">-30%</span>
-            <span class="new">NEW</span>
+            @if (Model.Offer_Price != 0)
+            {
+                decimal dif = Math.Round(Model.Price - Model.Offer_Price);
+                decimal y = dif * 100;
+                int x = (int)(y / Model.Price);
+                <span class="sale">@x %</span>
+            }
+            else
+            {
+                <span class="sale">0%</span>
+            }
+
+            <span class="new">@ResourceSite.NEW</span>
         </div>
     </div>
     <div class="product-body">
@@ -50,10 +62,13 @@
             {
 
 
-                <button class="add-to-wishlist"><i class="fa fa-heart-o" id="btnSave"></i><span class="tooltipp">add to wishlist</span></button>
+                <button class="add-to-wishlist"><i class="fa fa-heart-o" id="btnSave"></i><span class="tooltipp">@ResourceSite.add_to_wishlist</span></button>
             }
             else
             {
+              
+                    <span>@ResourceSite.Profit<span style="color:greenyellow;font-size:larger">@Model.Profit</span></span>
+                
                 Html.RenderAction("CheckWishList", new { product_id = Model.Id });
 
             }
@@ -63,9 +78,11 @@
 
 
         </div>
-        <a href="/Uproduct/details/@Model.Id" class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp"></span></a>
+       @* @Html.ActionLink("<i class='fa fa-eye'></i><span class='tooltipp'></span>", "details", "Uproduct", new { id= @Model.Id }, new { @class = "quick-view" })*@
+        <a href="@Url.Action("details", "Uproduct", 
+    new { id = Model.Id})" class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp"></span></a>
     </div>
     <div class="add-to-cart">
-        <button class="add-to-cart-btn" onclick="addToCart(@Model.Id)"><i class="fa fa-shopping-cart"></i> add to cart</button>
+        <button class="add-to-cart-btn" onclick="addToCart(@Model.Id)"><i class="fa fa-shopping-cart"></i> @ResourceSite.add_to_cart</button>
     </div>
 </div>

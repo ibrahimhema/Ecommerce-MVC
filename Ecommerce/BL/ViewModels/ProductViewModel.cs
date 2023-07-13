@@ -1,6 +1,7 @@
 ﻿using DAL.Model;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -29,7 +30,8 @@ namespace BL.ViewModels
         public decimal Offer_Price { get; set; }
 
         public int Sell_Count { get; set; }
-
+        [DefaultValue(0)]
+        public decimal Profit { get; set; }
         public DateTime Created_at = DateTime.Now;
 
         public string Vendor_User_id { get; set; }

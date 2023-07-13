@@ -11,7 +11,7 @@ using System.Web.Mvc;
 namespace Web.Controllers
 {
   
-    public class WishListController : Controller
+    public class WishListController : BaseController
     {
         WishListAppService WishList_service = new WishListAppService();
         ProductAppService ProductAppService = new ProductAppService();

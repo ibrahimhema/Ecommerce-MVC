@@ -90,7 +90,22 @@ namespace BL.AppServices
                 TheUnitOfWork.Account.GetAllUsersByRole(Role_Name.Vendor)
                 );
         }
-
+        public IdentityResult Edit(ApplicationUser user)
+        {
+            return TheUnitOfWork.Account.Edit(user);
+        }
+        public ProfileViewModel FindProfile(string username)
+        {
+            return Mapper.Map<ProfileViewModel>(TheUnitOfWork.Account.Find(username));
+        }
+        public ProfileEditViewModel GetForEdit(string username)
+        {
+            return Mapper.Map<ProfileEditViewModel>(Find(username));
+        }
+        public string GetRoleByUserId(string userId)
+        {
+            return TheUnitOfWork.Account.GetRoleByUserId(userId);
+        }
     }
 
 }

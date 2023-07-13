@@ -2,10 +2,18 @@
 @{
     ViewBag.Title = "ShowProductByCategory";
     Layout = "~/Views/Shared/_MainSiteLayoutView.cshtml";
+    var x = Model;
 }
-
-
 <div class="container">
+    <div style="margin-top:100px"></div>
+    @{
+        Html.RenderPartial("_SlickPrtialView", Model);
+
+    }
+</div>
+
+
+@*<div class="container">
     <div class="row">
         @foreach (var product in Model)
         {
@@ -16,7 +24,7 @@
         </div>
                 }
         </div>
-</div>
+</div>*@
      
         
         

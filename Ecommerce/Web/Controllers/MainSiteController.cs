@@ -1,16 +1,19 @@
 ﻿using BL.AppServices;
-
+using BL.Hlper;
 using BL.ViewModels;
 using DAL.Model;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 
+
 namespace Web.Controllers
 {
-    public class MainSiteController : Controller
+    public class MainSiteController : BaseController
     {
        
         Main_CatAppService mainCategoryAppService = new Main_CatAppService();
@@ -22,10 +25,13 @@ namespace Web.Controllers
         public ActionResult Index()
         {
             VariationOfProductsViewModel variationOfProductsViewModel = new VariationOfProductsViewModel();
+     
+         
             List<ProductViewModel> Products = ProductAppService.GetAllBroducts();
             variationOfProductsViewModel.ProductViewModels = Products;
             variationOfProductsViewModel.vendors = accountAppService.GetAllVendors();
-
+          
+            
             return View(variationOfProductsViewModel);
         }
         public ActionResult NavBarData()
@@ -46,10 +52,10 @@ namespace Web.Controllers
         }
        
 
-        public ActionResult ShowProductByCategory(int sub_cat_id)
+        public ActionResult ShowProductByCategory(int id)
         {
 
-         List<ProductViewModel> products= ProductAppService.GetAllBroducts().Where(p => p.Sub_Cat_Id == sub_cat_id).ToList();
+         List<ProductViewModel> products= ProductAppService.GetAllBroducts().Where(p => p.Sub_Cat_Id == id).ToList();
             return View(products);
         }
         [HttpPost]
@@ -70,7 +76,7 @@ namespace Web.Controllers
              
             }
         }
-        public ActionResult GetProductByStore(int vendorID)
+        public ActionResult GetProductByStore(string vendorID)
         {
           
           
@@ -95,6 +101,10 @@ namespace Web.Controllers
         }
         public ActionResult ShowWishList()
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             string id = accountAppService.Find(User.Identity.Name).Id;
             List<ProductViewModel> products = new List<ProductViewModel>();
          List<WishListViewModel>wishLists=   WishListAppService.GetAllWishList().Where(w => w.User_Id == id).ToList();
@@ -103,6 +113,69 @@ namespace Web.Controllers
                 products.Add(w.product);
             }
             return View("ShowProductByCategory",products);
+        }
+        public JsonResult getChildrens(int id)
+        {
+            helper help = new helper();
+            List<SubCategoryViewModelForAjax> child = new List<SubCategoryViewModelForAjax>();
+            foreach (var sub in help.showTree(id))
+                            {
+                child.Add(new SubCategoryViewModelForAjax { Id=sub.Id,Name=sub.Name});
+                            }
+             return Json(new
+            {
+                list = child
+            }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult getChildrens2(int id)
+        {
+            helper help = new helper();
+            List<Sub_Category> child = new List<Sub_Category>();
+            foreach (var sub in help.showTree(id))
+            {
+                child.Add(sub);
+            }
+            return PartialView("_HoverDropDownPartialView",child);
+        }
+        public ActionResult ProductByMainCatIdPartialView(int mainCatId ,string Type)
+        {
+            List<ProductViewModel> products = new List<ProductViewModel>();
+           foreach(var sub in SubCategoryAppService.GetSubCatByMainCatId(mainCatId))
+            {
+              products.AddRange(SubCategoryAppService.GetBroductsBySubCat(sub.Id));
+            }
+           if(Type=="N")
+            return PartialView("_ProductsPartialView", products);
+            else
+            {
+                products.Sort();
+                return PartialView("_ProductsPartialView", products);
+            }
+               
+        }
+        public ActionResult ChangeLangToArabic()
+        {
+            Session["SelectedCulture"] = "ar";
+            return RedirectToRoute(new { culture = "ar",action="Index",controller="MainSite"});
+           //  return RedirectToAction("Index");
+        }
+        public ActionResult ChangeLangToEnglish()
+        {
+            Session["SelectedCulture"] = "en";
+            return RedirectToRoute(new { culture = "en", action = "Index", controller = "MainSite" });
+        }
+        public ActionResult GetAllProducts(int pg)
+        {
+            if (pg < 1)
+            {
+                pg = 1;
+            }
+            int count = ProductAppService.GetAllBroductsCount();
+            Pager page = new Pager(count, pg, 3);
+            int rowskip = (pg - 1) * page.PageSize;
+            var data = ProductAppService.GetAllBroductsByParts(rowskip,page.PageSize);
+            ViewBag.Pager = page;
+            return View(data);
         }
     }
 }

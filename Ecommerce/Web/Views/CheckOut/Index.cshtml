@@ -1,0 +1,223 @@
+﻿@model IEnumerable<BL.ViewModels.CheckOutViewModel>
+@using BL.AppServices
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_adminPanel.cshtml";
+    AccountAppService accountAppService = new AccountAppService();
+
+}
+
+<select onselect="funcSelectOrderStautes(this)" onchange="funcSelectOrderStautes(this)" class="form-control">
+    <option value="0">Delivered</option>
+    <option value="1">Pending</option>
+    <option value="2">Cancelled</option>
+</select>
+
+
+
+
+<div class="container">
+    <div class="row">
+        <div class='col-sm-5'>
+
+            <input type='datetime-local' class="form-control" id='datetimepickerfrom' /><span>From</span>
+        </div>
+        <div class='col-sm-5'>
+
+            <input type='datetime-local' class="form-control" id='datetimepickerto' /><span>To</span>
+        </div>
+        <div class='col-sm-2'>
+
+            <button onclick="FunSearchByDate()">Search</button>
+        </div>
+
+    </div>
+</div>
+<div class="card-body">
+    <div class="table-responsive">
+        <table class="table table-striped" id="orderTable">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Id)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Total_Price)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Address)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Created_at)
+                    </th>
+                    <th>
+                        User Name
+                    </th>
+                    <th>
+                        User Type
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Payment_Id)
+                    </th>
+                    <th>
+                        Status
+                    </th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+
+                    <tr id="@item.Id">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Total_Price)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Address)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Created_at)
+                        </td>
+                        <td>
+                            @accountAppService.FindById(item.User_Id).UserName
+                        </td>
+                        <td>
+                            @accountAppService.GetRoleByUserId(item.User_Id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Payment_Id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id, RowId = item.Id })
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" onclick="funcOpenModelForShowOrderDetails(@item.Id)">
+                                Show Details
+                            </button>
+
+                        </td>
+                    </tr>
+
+
+                }
+            </tbody>
+
+
+
+        </table>
+    </div>
+    </div>
+      
+
+
+
+
+        <div class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="modal-appended">
+
+                    </div>
+                    <div class="modal-footer">
+
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+        @section scripts{
+            <script>
+        function funcSelectOrderStautes(SelectedBox) {
+
+         $.ajax(
+                    {
+                        type: 'get', //HTTP POST Method
+                        url: "@Url.Action("GetOrdersByStutesPartialView", "CheckOut")", // Controller/View
+                        data: { //Passing data
+                            Stutes: SelectedBox.options[SelectedBox.selectedIndex].value //Reading text box values using Jquery
+
+                        }, success: function (result) {
+                            $("#orderTable tbody").empty();
+
+                            console.log(result);
+
+                            $("#orderTable tbody").append(result);
+
+
+                        }, error: function (error) {
+                            console.log(error)
+                        }
+                    });
+        }
+        function FunSearchByDate() {
+
+                  $.ajax(
+                    {
+                        type: 'get', //HTTP POST Method
+                        url: "@Url.Action("GetOrdersByDatePartialView", "CheckOut")", // Controller/View
+                        data: { //Passing data
+
+                            from: $("#datetimepickerfrom").val(),
+                            to: $("#datetimepickerto").val()               //Reading text box values using Jquery
+
+                        }, success: function (result) {
+                            $("#orderTable tbody").empty();
+
+
+
+                            $("#orderTable tbody").append(result);
+
+
+                        }, error: function (error) {
+                            console.log(error)
+                        }
+                    });
+        }
+        function funcOpenModelForShowOrderDetails(orderId) {
+              $.ajax(
+                    {
+                        type: 'get', //HTTP POST Method
+                        url: "@Url.Action("GetOrdersDetailsByOrderId", "CheckOut")", // Controller/View
+                        data: { //Passing data
+
+                            OrderId: orderId
+                                     //Reading text box values using Jquery
+
+                        }, success: function (result) {
+                            $("#modal-appended").empty();
+
+
+
+                            $("#modal-appended").append(result);
+                            $('.modal').modal("show")
+
+
+                        }, error: function (error) {
+                            console.log(error)
+                        }
+                    });
+        }
+            </script>
+
+
+        }

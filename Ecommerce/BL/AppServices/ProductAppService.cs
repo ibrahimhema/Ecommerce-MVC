@@ -16,6 +16,16 @@ namespace BL.AppServices
              return Mapper.Map<List<ProductViewModel>>(TheUnitOfWork.Product.GetAllBroducts());
     
         }
+        public List<ProductViewModel> GetAllBroductsByParts(int skip, int take)
+        {
+            return Mapper.Map<List<ProductViewModel>>(TheUnitOfWork.Product.GetAllBroductsByParts(skip,take).ToList());
+           
+        }
+        public int GetAllBroductsCount()
+        {
+
+            return TheUnitOfWork.Product.GetAllBroductsCount();
+        }
         public ProductViewModel GetBroduct(int id)
         {
             return Mapper.Map<ProductViewModel>(TheUnitOfWork.Product.GetBroductyId(id));
@@ -51,5 +61,6 @@ namespace BL.AppServices
             Product product = Mapper.Map<Product>(productViewModel);
             return TheUnitOfWork.Product.CheckBroductExists(product);
         }
+       
     }
 }

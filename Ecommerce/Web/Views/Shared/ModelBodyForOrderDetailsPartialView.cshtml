@@ -1,0 +1,29 @@
+﻿@model List<DAL.Model.Order_Product>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Prduct Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Profit</th>
+                <th scope="col">Quntity</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model)
+            {
+            <tr>
+                <th scope="row">@product.Product_Id</th>
+                <td>@product.Product.Name</td>
+                <td>@product.Product.Price</td>
+                <td>@product.Product.Profit</td>
+                <td>@product.Quantity</td>
+
+            </tr>
+            }
+
+          
+        </tbody>
+    </table>
+

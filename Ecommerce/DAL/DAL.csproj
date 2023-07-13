@@ -64,21 +64,59 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Migrations\202107132230263_ibrahim.cs" />
-    <Compile Include="Migrations\202107132230263_ibrahim.designer.cs">
-      <DependentUpon>202107132230263_ibrahim.cs</DependentUpon>
+    <Compile Include="Migrations\202203131104060_first.cs" />
+    <Compile Include="Migrations\202203131104060_first.designer.cs">
+      <DependentUpon>202203131104060_first.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202204040038252_AddProfitToProduct.cs" />
+    <Compile Include="Migrations\202204040038252_AddProfitToProduct.designer.cs">
+      <DependentUpon>202204040038252_AddProfitToProduct.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202204041222193_ConvertToDecimal.cs" />
+    <Compile Include="Migrations\202204041222193_ConvertToDecimal.designer.cs">
+      <DependentUpon>202204041222193_ConvertToDecimal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202204041241515_wallet.cs" />
+    <Compile Include="Migrations\202204041241515_wallet.designer.cs">
+      <DependentUpon>202204041241515_wallet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202204041244078_wallet2.cs" />
+    <Compile Include="Migrations\202204041244078_wallet2.designer.cs">
+      <DependentUpon>202204041244078_wallet2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202204041408447_wallet4.cs" />
+    <Compile Include="Migrations\202204041408447_wallet4.designer.cs">
+      <DependentUpon>202204041408447_wallet4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202204041420172_wallet5.cs" />
+    <Compile Include="Migrations\202204041420172_wallet5.designer.cs">
+      <DependentUpon>202204041420172_wallet5.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202204082050019_Notifaction.cs" />
+    <Compile Include="Migrations\202204082050019_Notifaction.designer.cs">
+      <DependentUpon>202204082050019_Notifaction.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202307122227339_AddRequiredTable.cs" />
+    <Compile Include="Migrations\202307122227339_AddRequiredTable.designer.cs">
+      <DependentUpon>202307122227339_AddRequiredTable.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\About.cs" />
     <Compile Include="Model\Brand.cs" />
     <Compile Include="Model\IdentityModel.cs" />
     <Compile Include="Model\Main_Category.cs" />
+    <Compile Include="Model\Notifiication.cs" />
     <Compile Include="Model\Order.cs" />
     <Compile Include="Model\Order_Product.cs" />
+    <Compile Include="Model\Pager.cs" />
     <Compile Include="Model\Payment.cs" />
     <Compile Include="Model\Product.cs" />
+    <Compile Include="Model\ProductSizes.cs" />
+    <Compile Include="Model\ProductColors.cs" />
+    <Compile Include="Model\ProductImages.cs" />
     <Compile Include="Model\Rating.cs" />
     <Compile Include="Model\Sub_Category.cs" />
+    <Compile Include="Model\Wallet.cs" />
     <Compile Include="Model\WishList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -87,8 +125,32 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202107132230263_ibrahim.resx">
-      <DependentUpon>202107132230263_ibrahim.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202203131104060_first.resx">
+      <DependentUpon>202203131104060_first.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202204040038252_AddProfitToProduct.resx">
+      <DependentUpon>202204040038252_AddProfitToProduct.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202204041222193_ConvertToDecimal.resx">
+      <DependentUpon>202204041222193_ConvertToDecimal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202204041241515_wallet.resx">
+      <DependentUpon>202204041241515_wallet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202204041244078_wallet2.resx">
+      <DependentUpon>202204041244078_wallet2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202204041408447_wallet4.resx">
+      <DependentUpon>202204041408447_wallet4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202204041420172_wallet5.resx">
+      <DependentUpon>202204041420172_wallet5.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202204082050019_Notifaction.resx">
+      <DependentUpon>202204082050019_Notifaction.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202307122227339_AddRequiredTable.resx">
+      <DependentUpon>202307122227339_AddRequiredTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -4,8 +4,9 @@
     ViewBag.Title = "CreateProduct";
     Layout = "~/Views/Shared/_adminPanel.cshtml";
     SelectList selectListItems = new SelectList(ViewBag.brands, "Id", "Name");
-    //   SelectList selectListItemsVendors = new SelectList(ViewBag.Vendors, "Id", "UserName");
-
+    SelectList selectListItemsVendors = new SelectList(ViewBag.Vendors, "Id", "FirstName");
+    SelectList selectListsubCategory = new SelectList(ViewBag.subCategory, "Id", "Name");
+    
 }
 
 <h2>CreateProduct</h2>
@@ -24,7 +25,7 @@
 
         <div id="imageContainer" class="rounded-circle">
           
-                <input type="file" name="imageFile" id="imageFile" accept="image/png, image/jpeg, image/jpg" class="form-control" onchange="uploadImage()" />
+                <input type="file" name="imageFile" id="imageFile" accept="image/png, image/jpeg, image/jpg" class="form-control" onchange="UploadImageProduct(this)" />
            
             <img src="~/Content/Imgs/default.jpg" id="img" class="h-100 w-100" />
         </div>
@@ -82,8 +83,8 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Vendor_User_id, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @*   @Html.ListBoxFor(model => model.Vendor_User_id, selectListItemsVendors, new { @class = "form-control" })*@
-                @Html.EditorFor(model => model.Vendor_User_id, new { htmlAttributes = new { @class = "form-control" } })
+                  @Html.DropDownListFor(model => model.Vendor_User_id, selectListItemsVendors, new { @class = "form-control" })
+              @*  @Html.EditorFor(model => model.Vendor_User_id, new { htmlAttributes = new { @class = "form-control" } })*@
                 @Html.ValidationMessageFor(model => model.Vendor_User_id, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -91,7 +92,9 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Sub_Cat_Id, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Sub_Cat_Id, new { htmlAttributes = new { @class = "form-control" } })
+              @*  @Html.EditorFor(model => model.Sub_Cat_Id, new { htmlAttributes = new { @class = "form-control" } })*@
+                @Html.DropDownListFor(model => model.Sub_Cat_Id, selectListsubCategory, new { @class = "form-control" })
+               
                 @Html.ValidationMessageFor(model => model.Sub_Cat_Id, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -100,7 +103,7 @@
             @Html.LabelFor(model => model.Brand_Id, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
 
-                @Html.ListBoxFor(model => model.Brand_Id, selectListItems, new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.Brand_Id, selectListItems, new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.Brand_Id, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -119,4 +122,21 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        function UploadImageProduct(fileInput) {
+            var fileToUpload = fileInput.files.item(0)
+
+            var filereader = new FileReader();
+            filereader.onload = (event) => {
+                document.getElementById("img").src = event.target.result;
+
+            }
+            filereader.readAsDataURL(fileToUpload)
+        }
+
+
+
+
+    </script>
 }

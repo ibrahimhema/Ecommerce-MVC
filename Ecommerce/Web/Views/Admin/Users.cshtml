@@ -1,7 +1,10 @@
 ﻿@model IEnumerable<BL.ViewModels.AdminDisplayUserViewModel>
+    @using BL.AppServices;
 
 @{
     Layout = "~/Views/Shared/_adminPanel.cshtml";
+    ProductAppService productAppService = new ProductAppService();
+    CheckOutAppService checkOutAppService = new CheckOutAppService();
 }
 
 <h2>@ViewBag.title</h2>
@@ -14,22 +17,62 @@
         <th>
             @Html.DisplayNameFor(model => model.Email)
         </th>
+        @if (ViewBag.title == "Users")
+        {
+            <th>
+                Orders
+            </th>
+        }
         <th></th>
     </tr>
-
-    @foreach (var item in Model)
+    @if (ViewBag.title == "Vendors")
     {
-        <tr>
-            <td>
-            @item.FirstName @item.LastName
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.ActionLink("Make Admin", "RegisterAdminById", new { id = item.ID })
-            </td>
-        </tr>
+        foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.FirstName @item.LastName
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                @if (ViewBag.title == "Vendors")
+                {
+                    <th>
+                        @productAppService.GetAllBroducts().Where(p => p.Vendor_User_id == item.ID).Count()
+                    </th>
+                }
+                <td>
+                    @Html.ActionLink("Make Admin", "RegisterAdminById", new { id = item.ID })
+                </td>
+            </tr>
+        }
+
     }
+    else
+    {
+        foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.FirstName @item.LastName
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                @if (ViewBag.title == "Users")
+                {
+                    <th>
+                        @checkOutAppService.GetUserOrders(item.ID).Count()
+                    </th>
+                }
+                <td>
+                    @Html.ActionLink("Make Admin", "RegisterAdminById", new { id = item.ID })
+                </td>
+            </tr>
+        }
+
+    }
+
 
 </table>
