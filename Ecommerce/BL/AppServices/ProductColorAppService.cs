@@ -1,6 +1,6 @@
 ﻿using BL.Bases;
 using BL.ViewModels;
-
+using DAL.Model;
 using System.Collections.Generic;
 
 
@@ -10,13 +10,13 @@ namespace BL.AppServices
     {
         #region CURD
        
-        public List<ProductColorDTO> GetAllProductSize()
+        public List<ProductColorDTO> GetAllProductColor()
         {
             return Mapper.Map<List<ProductColorDTO>>(TheUnitOfWork.ProductColorRepositoty.GetAllProductColor());
         }
-        public ProductColorDTO GetProductSize(int id)
+        public ProductColors GetProductColor(int id)
         {
-            return Mapper.Map<ProductColorDTO>(TheUnitOfWork.ProductColorRepositoty.GetproductColorId(id));
+            return TheUnitOfWork.ProductColorRepositoty.GetproductColorId(id);
         }
 
 
@@ -24,7 +24,7 @@ namespace BL.AppServices
         public bool SaveNewProductColor(ProductColorDTO productColorDTO)
         {
             bool result = false;
-            var brand = Mapper.Map<ProductColor>(productColorDTO);
+            var brand = Mapper.Map<ProductColors>(productColorDTO);
             if (TheUnitOfWork.ProductColorRepositoty.Insert(brand))
             {
                 result = TheUnitOfWork.Commit() > new int();
@@ -33,10 +33,10 @@ namespace BL.AppServices
         }
 
 
-        public bool UpdateproductColor(ProductColorDTO productColorDTO)
+        public bool UpdateproductColor(ProductColors productColorDTO)
         {
-            var Brand = Mapper.Map<ProductColor>(productColorDTO);
-            TheUnitOfWork.ProductColorRepositoty.Update(Brand);
+            ;
+            TheUnitOfWork.ProductColorRepositoty.Update(productColorDTO);
             TheUnitOfWork.Commit();
 
             return true;
@@ -53,7 +53,7 @@ namespace BL.AppServices
 
         public bool CheckProductColorExists(ProductColorDTO productColorDTO)
         {
-            ProductColor Brand = Mapper.Map<ProductColor>(productColorDTO);
+            ProductColors Brand = Mapper.Map<ProductColors>(productColorDTO);
             return TheUnitOfWork.ProductColorRepositoty.CheckProductColorExists(Brand);
         }
         #endregion

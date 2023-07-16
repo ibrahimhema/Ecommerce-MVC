@@ -1,6 +1,6 @@
 ﻿using BL.Bases;
 using BL.ViewModels;
-
+using DAL.Model;
 using System.Collections.Generic;
 
 
@@ -14,9 +14,9 @@ namespace BL.AppServices
         {
             return Mapper.Map<List<ProductImagesDTO>>(TheUnitOfWork.ProductImagesRepositoty.GetAllProductSize());
         }
-        public ProductImagesDTO GetProductImages(int id)
+        public ProductImages GetProductImages(int id)
         {
-            return Mapper.Map<ProductImagesDTO>(TheUnitOfWork.ProductImagesRepositoty.GetProductImagesId(id));
+            return TheUnitOfWork.ProductImagesRepositoty.GetProductImagesId(id);
         }
 
 
@@ -33,10 +33,10 @@ namespace BL.AppServices
         }
 
 
-        public bool UpdateProductSize(ProductImagesDTO productImagesDTO)
+        public bool UpdateProductImage(ProductImages productImagesDTO)
         {
-            var Brand = Mapper.Map<ProductImages>(productImagesDTO);
-            TheUnitOfWork.ProductImagesRepositoty.Update(Brand);
+            //var Brand = Mapper.Map<ProductImages>(productImagesDTO);
+            TheUnitOfWork.ProductImagesRepositoty.Update(productImagesDTO);
             TheUnitOfWork.Commit();
 
             return true;
@@ -53,7 +53,7 @@ namespace BL.AppServices
 
         public bool CheckProductSizeExists(ProductImagesDTO productImagesDTO)
         {
-            ProductImages Brand = Mapper.Map<ProductImages>(productSizeDTO);
+            ProductImages Brand = Mapper.Map<ProductImages>(productImagesDTO);
             return TheUnitOfWork.ProductImagesRepositoty.CheckProductImagesExists(Brand);
         }
         #endregion

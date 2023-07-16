@@ -13,8 +13,8 @@ namespace BL.ViewModels
     public class CheckOutViewModel
     {
         public int Id { get; set; }
-        [DefaultValue(Order_Status.Pending)]
-        public Order_Status Status { get; set; }
+
+        public string Status { get; set; }
         [Display(Name = "Total")]
         public decimal Total_Price { get; set; }
 
@@ -29,13 +29,15 @@ namespace BL.ViewModels
       
 
         [Display(Name = "Payment Method")]
-        public int Payment_Id { get; set; }
+        public string Payment_Id { get; set; }
 
-       // public int payment { get; set; }
-
+        // public int payment { get; set; }
+        public string UserName { get; set; }
 
         public int? RowId { set; get; }
         public List<Order_Product> Products { get; set; }
+        public ApplicationUser User { get; set; }
+        public Payment Payment { get; set; }
 
         //order Details 
 

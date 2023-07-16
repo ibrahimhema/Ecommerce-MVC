@@ -88,7 +88,7 @@ namespace BL.Repositories
         public List<ApplicationUser> GetAllUsersByRole(Role_Name role)
         {
             List<ApplicationUser> retval = new List<ApplicationUser>();
-            var allusers = manager.Users.ToList();
+            var allusers = manager.Users.Include(x=>x.Products).Include(x=>x.Orders).ToList();
             foreach (var user in allusers)
             {
                 if (IsInRole(user.Id, role))

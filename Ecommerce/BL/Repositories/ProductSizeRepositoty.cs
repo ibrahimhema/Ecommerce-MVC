@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BL.Repositories
 {
-    public class ProductSizeRepositoty : BaseRepository<ProductSize>
+    public class ProductSizeRepositoty : BaseRepository<ProductSizes>
     {
         public ProductSizeRepositoty(DbContext db):base(db)
         {
@@ -17,16 +17,19 @@ namespace BL.Repositories
 
         #region CRUB
 
-        public List<ProductSize> GetAllProductSize()
+        public List<ProductSizes> GetAllProductSize()
         {
             return GetAll().ToList();
         }
-
-        public bool InsertProductSize(ProductSize productSize)
+        public List<ProductSizes> GetAllProductSizeByProductId(int productId)
+        {
+            return GetAll().Where(x=>x.ProductId==productId).ToList();
+        }
+        public bool InsertProductSize(ProductSizes productSize)
         {
             return Insert(productSize);
         }
-        public void UpdateProductSize(ProductSize productSize)
+        public void UpdateProductSize(ProductSizes productSize)
         {
             Update(productSize);
         }
@@ -35,11 +38,11 @@ namespace BL.Repositories
             Delete(id);
         }
 
-        public bool CheckProductSizeExists(ProductSize productSize)
+        public bool CheckProductSizeExists(ProductSizes productSize)
         {
             return GetAny(b => b.Id == productSize.Id);
         }
-        public Brand GetProductSizeId(int id)
+        public ProductSizes GetProductSizeId(int id)
         {
             return GetFirstOrDefault(b => b.Id == id);
         }

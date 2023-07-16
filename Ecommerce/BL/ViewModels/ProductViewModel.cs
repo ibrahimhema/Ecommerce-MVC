@@ -50,6 +50,7 @@ namespace BL.ViewModels
         public BrandViewModel Brand { get; set; }
         public virtual List<Rating> Ratings { get; set; }
         public List<WishList> wishLists { set; get; }
+        public bool Active { set; get; }
 
         public int CompareTo(object obj)
         {

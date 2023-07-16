@@ -30,6 +30,10 @@ namespace BL.AppServices
         {
             return Mapper.Map<ProductViewModel>(TheUnitOfWork.Product.GetBroductyId(id));
         }
+        public Product GetBroductModel(int id)
+        {
+            return TheUnitOfWork.Product.GetBroductyId(id);
+        }
         public bool SaveNewBroduct(ProductViewModel productViewModel)
         {
             bool result = false;
@@ -40,9 +44,9 @@ namespace BL.AppServices
             }
             return result;
         }
-        public bool UpdateBroduct(ProductViewModel productViewModel)
+        public bool UpdateBroduct(Product product, ProductViewModel productViewModel)
         {
-            var product = Mapper.Map<Product>(productViewModel);
+            product = Mapper.Map(productViewModel,product);
             TheUnitOfWork.Product.Update(product);
             TheUnitOfWork.Commit();
 

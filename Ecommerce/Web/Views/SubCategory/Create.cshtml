@@ -3,12 +3,80 @@
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_adminPanel.cshtml";
     SelectList selectitem = new SelectList(ViewBag.Parent, "Id", "Name");
-    SelectList selectitem2 = new SelectList(ViewBag.Main, "Id", "Name"); 
+    SelectList selectitem2 = new SelectList(ViewBag.Main, "Id", "Name");
 }
 <h2>Create</h2>
-<div class="col-8">
+
+
+
+<div class="row mt-4 mb-4">
+    <div class="col-9">
+
+        <div class="col-9">
+            <form class="form-inline">
+                <input id="txtName" type="text" placeholder="Name..." class="form-control mb-2 mr-sm-2 mb-sm-0" />
+
+                <button id="btnSearch" type="button" class="gj-button-md">Search</button>
+                <button id="btnClear" type="button" class="gj-button-md">Clear</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-3">
+        <button id="btnAdd" type="button" class="btn btn-default pull-right">Add New Category</button>
+    </div>
+</div>
+
+<div class="clear-both"></div>
+<div class="margin-top-10">
+    <table id="grid"></table>
+</div>
+
+<div id="dialog" class="gj-display-none">
+    <div data-role="body" class="text-center form-group">
+        <input type="hidden" id="Id" />
+
+
+
+        <div id="imageContainer" class="rounded-circle">
+
+            <input type="file" name="imageFile" id="txtCatPhoto" accept="image/png, image/jpeg, image/jpg" class="form-control" onchange="uploadImage('txtCatPhoto','img')" />
+
+            <img src="~/Content/Imgs/default.jpg" id="img" class="h-100 w-100" />
+        </div>
+
+        <div class="form-row">
+            <input type="text" class="gj-textbox-md" id="txtCatName" placeholder="Name...">
+        </div>
+
+
+        <div class="form-row">
+            <select id="MainCategory" width="100%" placeholder="Main Category..."></select>
+        </div>
+
+        <div class="form-row">
+            <select id="SubCategory" width="100%" placeholder="Sub Category..."></select>
+        </div>
+
+
+    </div>
+    <div data-role="footer">
+        <button type="button" id="btnSave" class="gj-button-md">Save</button>
+        <button type="button" id="btnCancel" class="gj-button-md">Cancel</button>
+    </div>
+
+
+</div>
+
+
+
+
+
+
+
+<!--<div class="col-8">
     <form class="form-group" method="post" enctype="multipart/form-data" id="imageForm">
-      
+
             @Html.AntiForgeryToken()
             <div class="form-horizontal">
                 <h4>Sub_Category</h4>
@@ -44,17 +112,16 @@
                         @Html.DropDownListFor(model => model.Cat_Id, selectitem2, new { style = "font-size:1.2em;width:100%" })
                         @Html.ValidationMessageFor(model => model.Cat_Id, "", new { @class = "text-danger" })
                     </div>
-                </div>
-
-                @*<div class="form-group">
-                        <div class="col-md-10">
-                            <label for="file">
-                                Image :
-                                <input type="file" id="file" name="file" style="opacity:1;position:relative">
-                            </label>
-                        </div>
-                    </div>*@
-                <br><br><br>
+                </div>-->
+@*<div class="form-group">
+        <div class="col-md-10">
+            <label for="file">
+                Image :
+                <input type="file" id="file" name="file" style="opacity:1;position:relative">
+            </label>
+        </div>
+    </div>*@
+<!--<br><br><br>
 
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
@@ -63,11 +130,126 @@
                 </div>
             </div>
         </form>
-</div>
+</div>-->
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+<script type="text/javascript">
+    let grid, dialog, mainCategoryDropdown, subCategoryDropdown;
+
+    function Save() {
+        debugger
+        let Upload = document.getElementById('txtCatPhoto');
+        var fileUpload = Upload.files[0];
+
+        var fileData = new FormData();
+
+        fileData.append(fileUpload.name, fileUpload);
+
+        var record = {
+            Id: $('#Id').val(),
+            Name: $('#txtCatName').val(),
+            Cat_Id: mainCategoryDropdown.value(),
+            Parent_Id: subCategoryDropdown.value(),
+
+        };
+        var xhttp = new XMLHttpRequest();
+        fileData.append('name', record.Name);
+        fileData.append('id', record.Id);
+        fileData.append('Cat_Id', record.Cat_Id);
+        fileData.append('Parent_Id', record.Parent_Id);
+        xhttp.open("POST", '/SubCategory/Create', true);
+
+        xhttp.send(fileData);
+        xhttp.onreadystatechange = function () {
+            if (this.status == 200) {
+
+                dialog.close();
+                grid.reload();
+            } else {
+                alert('Failed to save.');
+                dialog.close();
+            }
+        };
+
+
+    }
+    function Edit(e) {
+
+        $('#Id').val(e.data.id);
+
+        $('#txtCatName').val(e.data.record.Name);
+        mainCategoryDropdown.value(e.data.record.Cat_Id);
+        subCategoryDropdown.value(e.data.record.Parent_Id);
+        dialog.open('Edit Category');
+    }
+
+
+
+    function Delete(e) {
+        if (confirm('Are you sure?')) {
+            $.ajax({ url: '/MainCategory/Delete', data: { id: e.data.id }, method: 'POST' })
+                .done(function () {
+                    grid.reload();
+                })
+                .fail(function () {
+                    alert('Failed to delete.');
+                });
+        }
+    }
+    $(document).ready(function () {
+
+        grid = $('#grid').grid({
+            primaryKey: 'Id',
+            dataSource: '/SubCategory/GetSubCategory',
+            uiLibrary: 'bootstrap4',
+            columns: [
+                { field: 'Id', width: 48 },
+                { field: 'Name', title: 'Category Name', sortable: true },
+                { field: 'Photo', title: 'Photo', type: 'image' },
+                { field: 'MainCatName', title: 'Main Category Name' },
+                { field: 'ParentCatName', title: 'Parent Category Name' },
+                { field: 'Parent_Id', title: 'Parent' },
+                { field: 'Cat_Id', title: 'Main' },
+                { field: 'Active', title: 'Active', type: 'checkbox', width: 90, align: 'center' },
+                { title: '', field: 'Edit', width: 42, type: 'icon', icon: 'fa fa-pencil', tooltip: 'Edit', events: { 'click': Edit } },
+                { title: '', field: 'Delete', width: 42, type: 'icon', icon: 'fa fa-remove', tooltip: 'Delete', events: { 'click': Delete } }
+            ],
+            pager: { limit: 5, sizes: [2, 5, 10, 20] }
+        });
+        dialog = $('#dialog').dialog({
+            uiLibrary: 'bootstrap4',
+            iconsLibrary: 'fontawesome',
+            autoOpen: false,
+            resizable: false,
+            modal: true
+        });
+        mainCategoryDropdown = $('#MainCategory').dropdown({ dataSource: '/SubCategory/GetSubCategoryAjax', valueField: 'id' });
+        subCategoryDropdown = $('#SubCategory').dropdown({ dataSource: '/SubCategory/GetMainCategoryAjax', valueField: 'id' });
+        $('#btnAdd').on('click', function () {
+            $('#Id').val('');
+            $('#txtName').val('');
+            $('#txtPhoto').val('');
+            mainCategoryDropdown.value('');
+            subCategoryDropdown.value('');
+            dialog.open('Add Catrgory');
+        });
+        $('#btnSave').on('click', Save);
+        $('#btnCancel').on('click', function () {
+            dialog.close();
+        });
+        $('#btnSearch').on('click', function () {
+            grid.reload({ name: $('#txtName').val() });
+        });
+
+
+
+    });
+</script>
+
+
 }

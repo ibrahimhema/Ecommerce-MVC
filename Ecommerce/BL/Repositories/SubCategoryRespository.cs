@@ -15,9 +15,9 @@ namespace BL.Repositories
         {
 
         }
-        public List<Sub_Category> GetAllSubCategories()
+        public IQueryable<Sub_Category> GetAllSubCategories()
         {
-            return GetAll().ToList();
+            return GetAll().Include(x=>x.Main_Category).Include(x=>x.Parent);
         }
 
         public bool InsertSubCategory(Sub_Category Sub_Category)

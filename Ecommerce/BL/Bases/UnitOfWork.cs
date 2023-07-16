@@ -141,6 +141,30 @@ namespace BL.Bases
               return notification = notification ?? new NotificationReposatory(EC_Context);
             }
         }
+        private ProductImagesRepositoty productImagesRepositoty;
+        public ProductImagesRepositoty ProductImagesRepositoty
+        {
+            get
+            {
+                return productImagesRepositoty = productImagesRepositoty ?? new ProductImagesRepositoty(EC_Context);
+            }
+        }
+        private ProductSizeRepositoty productSizeRepositoty;
+        public ProductSizeRepositoty ProductSizeRepositoty
+        {
+            get
+            {
+                return productSizeRepositoty = productSizeRepositoty ?? new ProductSizeRepositoty(EC_Context);
+            }
+        }
+        private ProductColorRepositoty productColorRepositoty;
+        public ProductColorRepositoty ProductColorRepositoty
+        {
+            get
+            {
+                return productColorRepositoty = productColorRepositoty ?? new ProductColorRepositoty(EC_Context);
+            }
+        }
 
         // Main_CatRepository IUnitOfWork.mainCategory => throw new NotImplementedException();
         #endregion

@@ -30,6 +30,16 @@ namespace BL.Configurations
                     cfg.CreateMap<Order, CheckOutViewModel>().ReverseMap();
                     cfg.CreateMap<Order_Product, OrderDetailsViewModel>().ReverseMap();
                     cfg.CreateMap<WishList, WishListViewModel>().ReverseMap();
+                    cfg.CreateMap<Sub_Category, SubCategoryViewModel>().ReverseMap();
+
+
+                    cfg.CreateMap<ProductSizes , ProductSizeDTO>().ReverseMap();
+                    cfg.CreateMap<ProductColors, ProductColorDTO>().ReverseMap();
+                    cfg.CreateMap<ProductImages, ProductImagesDTO>().ForMember(dest => dest.ImageURL, opt => opt.MapFrom(src => src.PhotoURL)).ReverseMap();
+
+
+                    cfg.CreateMap<Main_Category, MainCategoryViewModelForAjax>().ReverseMap();
+
                 });
 
             Mapper = conig.CreateMapper();

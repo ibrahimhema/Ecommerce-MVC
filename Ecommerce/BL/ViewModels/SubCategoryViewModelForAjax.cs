@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BL.ViewModels
 {
-   public class SubCategoryViewModelForAjax
+    public class SubCategoryViewModelForAjax
     {
        public int Id { set; get; }
         public string Name { set; get; }

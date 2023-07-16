@@ -5,64 +5,264 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_adminPanel.cshtml";
 }
+@section Styles{
+    <style>
+        .form-row {
+            display: flex;
+            margin-bottom: 29px;
+        }
 
+            .form-row:last-child {
+                margin-bottom: 0px;
+            }
+
+        .margin-top-10 {
+            margin-top: 10px;
+        }
+
+        .float-left {
+            float: left;
+        }
+
+        .float-right {
+            float: right;
+        }
+
+        .display-inline {
+            display: inline;
+        }
+
+        .display-inline-block {
+            display: inline-block;
+        }
+
+        .width-200 {
+            width: 200px;
+        }
+
+        .clear-both {
+            clear: both;
+        }
+
+        .gj-display-none {
+            display: none;
+        }
+        #dialog span::after {
+            margin-top: 16px;
+        }
+    </style>
+}
 <h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New Category", "Create",null,new {@class="btn btn-primary" })
-</p>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header card-header-primary">
-                    <h4 class="card-title ">Simple Table</h4>
-                    <p class="card-category"> Here is a subtitle for this table</p>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead class=" text-primary">
-                                <tr>
-                            <th>
-                                Name
-                            </th>
-                            <th>
-                               Main Category
-                            </th>
-                            <th>
-                                Sub Category
-                            </th>
-                            <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model)
-                                {
-                                 <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Main_Category.Name)
-                                </td>
-                                <td>
-                                    
-                                    @Html.DisplayFor(modelItem => item.Parent.Name)
-                                </td>
-                                <td>
-                                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                                </td>
-                                </tr>
-                            }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-       
-      
 
-  
+
+<div class="row mt-4 mb-4">
+    <div class="col-9">
+
+        <div class="col-9">
+            <form class="form-inline">
+                <input id="txtName" type="text" placeholder="Name..." class="form-control mb-2 mr-sm-2 mb-sm-0" />
+
+                <button id="btnSearch" type="button" class="gj-button-md">Search</button>
+                <button id="btnClear" type="button" class="gj-button-md">Clear</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-3">
+        <button id="btnAdd" type="button" class="btn btn-default pull-right">Add New Category</button>
+    </div>
+</div>
+
+<div class="clear-both"></div>
+<div class="margin-top-10">
+    <table id="grid"></table>
+</div>
+
+<div id="dialog" class="gj-display-none">
+    <div data-role="body" class="text-center form-group">
+        <input type="hidden" id="Id" />
+
+
+
+        <div id="imageContainer" class="rounded-circle">
+
+            <input type="file" name="imageFile" id="txtCatPhoto" accept="image/png, image/jpeg, image/jpg" class="form-control" onchange="uploadImage('txtCatPhoto','img')" />
+
+            <img src="~/Content/Imgs/default.jpg" id="img" class="h-100 w-100" />
+        </div>
+
+        <div class="form-row">
+            <input type="text" class="gj-textbox-md" id="txtCatName" placeholder="Name...">
+        </div>
+
+
+        <div class="form-row">
+            <select id="MainCategory" width="100%" placeholder="Main Category..."></select>
+        </div>
+
+        <div class="form-row">
+            <select id="SubCategory" width="100%" placeholder="Sub Category..."></select>
+        </div>
+        <div class="form-row">
+            <label for="IsActive"><input type="checkbox" id="IsActive" /> &nbsp;Is Active?</label>
+        </div>
+
+    </div>
+    <div data-role="footer">
+        <button type="button" id="btnSave" class="gj-button-md">Save</button>
+        <button type="button" id="btnCancel" class="gj-button-md">Cancel</button>
+    </div>
+
+
+</div>
+
+
+
+
+
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        let grid, dialog, mainCategoryDropdown, subCategoryDropdown, isActiveCheckbox;
+
+        function Save() {
+            debugger
+            let Upload = document.getElementById('txtCatPhoto');
+            var fileUpload = Upload.files[0];
+            if (fileUpload == undefined) {
+                alert('Please Choose Image to save.');
+                return false;
+            }
+            var fileData = new FormData();
+
+            fileData.append(fileUpload.name, fileUpload);
+
+            var record = {
+                Id: $('#Id').val(),
+                Name: $('#txtCatName').val(),
+                Cat_Id: mainCategoryDropdown.value(),
+                Parent_Id: subCategoryDropdown.value(),
+                IsActive: $('#IsActive').prop('checked')
+
+            };
+            var xhttp = new XMLHttpRequest();
+            fileData.append('name', record.Name);
+            fileData.append('id', record.Id);
+            fileData.append('Cat_Id', record.Cat_Id);
+            fileData.append('Parent_Id', record.Parent_Id);
+            fileData.append('Active', record.IsActive);
+            xhttp.open("POST", '/SubCategory/Create', true);
+
+            xhttp.send(fileData);
+            xhttp.onreadystatechange = function () {
+                if (this.status == 200) {
+
+                    dialog.close();
+                    grid.reload();
+                } else {
+                    alert('Failed to save.');
+                    dialog.close();
+                }
+            };
+
+
+        }
+        function Edit(e) {
+            debugger
+            $('#Id').val(e.data.id);
+
+            $('#txtCatName').val(e.data.record.Name);
+            mainCategoryDropdown.val(e.data.record.Cat_Id);
+            console.log('fffffffffff', mainCategoryDropdown.value())
+            console.log('fffffffffff2', e.data.record.Cat_Id)
+            subCategoryDropdown.val(e.data.record.Parent_Id);
+            isActiveCheckbox.state(e.data.record.Active ? 'checked' : 'unchecked');
+            dialog.open('Edit Category');
+        }
+
+
+
+        function Delete(e) {
+            if (confirm('Are you sure?')) {
+                $.ajax({ url: '/SubCategory/Delete', data: { id: e.data.id }, method: 'POST' })
+                    .done(function (res) {
+                       
+                        if (res.result == true) {
+                            alert("Success Delete")
+                            grid.reload();
+                        } else {
+                            alert(res.message);
+                        }
+                       
+                    })
+                    .fail(function () {
+                        alert('Failed to delete.');
+                    });
+            }
+        }
+        $(document).ready(function () {
+
+            grid = $('#grid').grid({
+                primaryKey: 'Id',
+                dataSource: '/SubCategory/GetSubCategory',
+                uiLibrary: 'bootstrap4',
+                columns: [
+                    { field: 'Id', width: 48 },
+                    { field: 'Name', title: 'Category Name', sortable: true },
+                    { field: 'Photo', title: 'Photo', type: 'image' },
+                    { field: 'MainCatName', title: 'Main Category Name' },
+                    { field: 'ParentCatName', title: 'Parent Category Name' },
+                    { field: 'Parent_Id', title: 'Parent' },
+                    { field: 'Cat_Id', title: 'Main' },
+                    { field: 'Active', title: 'Active', type: 'checkbox', width: 90, align: 'center' },
+                    { title: '', field: 'Edit', width: 42, type: 'icon', icon: 'fa fa-pencil', tooltip: 'Edit', events: { 'click': Edit } },
+                    { title: '', field: 'Delete', width: 42, type: 'icon', icon: 'fa fa-remove', tooltip: 'Delete', events: { 'click': Delete } }
+                ],
+                pager: { limit: 5, sizes: [2, 5, 10, 20] }
+            });
+            dialog = $('#dialog').dialog({
+                uiLibrary: 'bootstrap4',
+                iconsLibrary: 'fontawesome',
+                autoOpen: false,
+                resizable: false,
+                modal: true
+            });
+            mainCategoryDropdown = $('#MainCategory').dropdown({ dataSource: '/SubCategory/GetMainCategoryAjax', valueField: 'value' });
+            subCategoryDropdown = $('#SubCategory').dropdown({ dataSource: '/SubCategory/GetSubCategoryAjax', valueField: 'value' });
+            isActiveCheckbox = $('#IsActive').checkbox();
+            $('#btnAdd').on('click', function () {
+                $('#Id').val('');
+                $('#txtName').val('');
+                $('#txtPhoto').val('');
+                mainCategoryDropdown.value('');
+                subCategoryDropdown.value('');
+                isActiveCheckbox.state('unchecked');
+                dialog.open('Add Catrgory');
+            });
+            $('#btnSave').on('click', Save);
+            $('#btnCancel').on('click', function () {
+                dialog.close();
+            });
+            $('#btnSearch').on('click', function () {
+                grid.reload({ name: $('#txtName').val() });
+            });
+
+
+
+        });
+    </script>
+
+
+}
+
+
+
+
+

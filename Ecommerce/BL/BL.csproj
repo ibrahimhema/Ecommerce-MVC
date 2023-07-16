@@ -125,6 +125,8 @@
     <Compile Include="ViewModels\RegisterViewModel.cs" />
     <Compile Include="ViewModels\RoleViewModel.cs" />
     <Compile Include="ViewModels\SearchViewModel.cs" />
+    <Compile Include="ViewModels\MainCategoryViewModelForAjax.cs" />
+    <Compile Include="ViewModels\SubCategoryViewModel.cs" />
     <Compile Include="ViewModels\SubCategoryViewModelForAjax.cs" />
     <Compile Include="ViewModels\VariationOfProductsViewModel.cs" />
     <Compile Include="ViewModels\WishListViewModel.cs" />

@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<BL.ViewModels.AdminDisplayUserViewModel>
-    @using BL.AppServices;
+@using BL.AppServices;
 
 @{
     Layout = "~/Views/Shared/_adminPanel.cshtml";
@@ -9,70 +9,131 @@
 
 <h2>@ViewBag.title</h2>
 
-<table class="table">
-    <tr>
-        <th>
-            Full name
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Email)
-        </th>
-        @if (ViewBag.title == "Users")
-        {
-            <th>
-                Orders
-            </th>
+
+<!--start new datagrid-->
+
+
+
+<div class="row mt-4 mb-4">
+    <div class="col-9">
+
+        <div class="col-9">
+            <form class="form-inline">
+                <input id="txtName" type="text" placeholder="Name..." class="form-control mb-2 mr-sm-2 mb-sm-0" />
+                <input id="txtEmail" type="text" placeholder="Email..." class="form-control mb-2 mr-sm-2 mb-sm-0" />
+                <button id="btnSearch" type="button" class="gj-button-md">Search</button>
+                <button id="btnClear" type="button" class="gj-button-md">Clear</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-3">
+        <button id="btnAdd" type="button" class="btn btn-default pull-right">Add New Product</button>
+    </div>
+</div>
+
+<div class="clear-both"></div>
+<div class="margin-top-10">
+    <table id="grid"></table>
+</div>
+
+<div id="dialog" class="gj-display-none">
+    <div data-role="body">
+        <input type="hidden" id="Id" />
+        <div class="form-row">
+            <input type="text" class="gj-textbox-md" id="Name" placeholder="Name...">
+        </div>
+        <div class="form-row">
+            <select id="Nationality" width="100%" placeholder="Nationality..."></select>
+        </div>
+        <div class="form-row">
+            <input type="text" id="DateOfBirth" placeholder="Date Of Birth..." width="100%" />
+        </div>
+        <div class="form-row">
+            <label for="IsActive"><input type="checkbox" id="IsActive" /> &nbsp;Is Active?</label>
+        </div>
+    </div>
+    <div data-role="footer">
+        <button type="button" id="btnSave" class="gj-button-md">Save</button>
+        <button type="button" id="btnCancel" class="gj-button-md">Cancel</button>
+    </div>
+
+
+</div>
+
+
+
+
+
+<!--end new datagrid-->
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        let grid, dialog;
+        function Edit(e) {
+            $('#Id').val(e.data.id);
+
+          window.location.href = '@Url.Action("GetProductDetails", "Product")'+'?productId=' + e.data.id;
         }
-        <th></th>
-    </tr>
-    @if (ViewBag.title == "Vendors")
-    {
-        foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @item.FirstName @item.LastName
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Email)
-                </td>
-                @if (ViewBag.title == "Vendors")
-                {
-                    <th>
-                        @productAppService.GetAllBroducts().Where(p => p.Vendor_User_id == item.ID).Count()
-                    </th>
-                }
-                <td>
-                    @Html.ActionLink("Make Admin", "RegisterAdminById", new { id = item.ID })
-                </td>
-            </tr>
+        function Save() {
+            window.location.href = '@Url.Action("CreateProduct", "Product")';
+
         }
-
-    }
-    else
-    {
-        foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @item.FirstName @item.LastName
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Email)
-                </td>
-                @if (ViewBag.title == "Users")
-                {
-                    <th>
-                        @checkOutAppService.GetUserOrders(item.ID).Count()
-                    </th>
-                }
-                <td>
-                    @Html.ActionLink("Make Admin", "RegisterAdminById", new { id = item.ID })
-                </td>
-            </tr>
+        function Delete(e) {
+            if (confirm('Are you sure?')) {
+                $.ajax({ url: '/Product/Delete', data: { id: e.data.id }, method: 'POST' })
+                    .done(function () {
+                        grid.reload();
+                    })
+                    .fail(function () {
+                        alert('Failed to delete.');
+                    });
+            }
         }
+    $(document).ready(function () {
 
-    }
+             grid = $('#grid').grid({
+                primaryKey: 'Id',
+                 dataSource: '/Admin/GetUsers',
+                uiLibrary: 'bootstrap4',
+                columns: [
+                    { field: 'Id', width: 48 },
+                    { field: 'FirstName', title: 'Name', sortable: true },
+                    { field: 'Email', sortable: true },
+                    { field: 'Orders', sortable: true },
+                    { field: 'Created_at', title: 'Created At', type: 'date' },
+                    { field: 'Active', title: 'Active', type: 'checkbox', width: 90, align: 'center' },
+                    { title: '', field: 'Edit', width: 42, type: 'icon', icon: 'fa fa-pencil', tooltip: 'Edit', events: { 'click': Edit } },
+                    { title: '', field: 'Delete', width: 42, type: 'icon', icon: 'fa fa-remove', tooltip: 'Delete', events: { 'click': Delete } }
+                ],
+                pager: { limit: 5, sizes: [2, 5, 10, 20] }
+            });
+            dialog = $('#dialog').dialog({
+                uiLibrary: 'bootstrap4',
+                iconsLibrary: 'fontawesome',
+                autoOpen: false,
+                resizable: false,
+                modal: true
+            });
+            $('#btnAdd').on('click', function () {
+                Save();
+            });
+            $('#btnSave').on('click', Save);
+            $('#btnCancel').on('click', function () {
+                dialog.close();
+            });
+            $('#btnSearch').on('click', function () {
+                grid.reload({ name: $('#txtName').val(), email: $('#txtEmail').val()});
+            });
 
 
-</table>
+
+        });
+    </script>
+
+
+}

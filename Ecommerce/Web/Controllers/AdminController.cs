@@ -128,20 +128,255 @@ namespace Web.Controllers
 
         public ActionResult Admins()
         {
-            return View(accountAppService.GetAllAdmins());
+            ViewBag.title = "Users";
+            return View();
         }
 
         
         public ActionResult Users()
         {
             ViewBag.title = "Users";
-            return View(accountAppService.GetAllUsers());
+            return View();
         }
 
         public ActionResult Vendors()
         {
             ViewBag.title = "Vendors";
-            return View("Users", accountAppService.GetAllVendors());
+            return View();
+        }
+
+
+
+        [HttpGet]
+
+        public JsonResult GetVendors(int? page, int? limit, string sortBy, string direction, string name, string email)
+        {
+            List<AdminDisplayUserViewModel> records = new List<AdminDisplayUserViewModel>();
+            int total = 0;
+
+            var query = accountAppService.GetAllVendorsData().Select(p => new AdminDisplayUserViewModel
+            {
+            
+                Active = p.Active,
+                Created_at=p.Created_at,
+                Email=p.Email,
+                FirstName=p.FirstName,
+                LastName=p.LastName,
+                ID=p.Id,
+                Photo=p.Photo,
+                Products=p.Products.Count
+
+            });
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                query = query.Where(q => q.FirstName != null && q.FirstName.Contains(name));
+            }
+
+            if (!string.IsNullOrWhiteSpace(email))
+            {
+                query = query.Where(q => q.Email != null && q.Email.Contains(email));
+            }
+            if (!string.IsNullOrEmpty(sortBy) && !string.IsNullOrEmpty(direction))
+            {
+                if (direction.Trim().ToLower() == "asc")
+                {
+                    switch (sortBy.Trim().ToLower())
+                    {
+                        case "name":
+                            query = query.OrderBy(q => q.FirstName);
+                            break;
+                        case "email":
+                            query = query.OrderBy(q => q.Email);
+                            break;
+
+                    }
+                }
+                else
+                {
+                    switch (sortBy.Trim().ToLower())
+                    {
+
+                        case "name":
+                            query = query.OrderByDescending(q => q.FirstName);
+                            break;
+                        case "email":
+                            query = query.OrderByDescending(q => q.Email);
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                query = query.OrderBy(q => q.ID);
+            }
+
+            total = query.Count();
+            if (page.HasValue && limit.HasValue)
+            {
+                int start = (page.Value - 1) * limit.Value;
+                records = query.Skip(start).Take(limit.Value).ToList();
+            }
+            else
+            {
+                records = query.ToList();
+            }
+            return this.Json(new { records, total }, JsonRequestBehavior.AllowGet);
+
+        }
+        [HttpGet]
+
+        public JsonResult GetUsers(int? page, int? limit, string sortBy, string direction, string name, string email)
+        {
+            List<AdminDisplayUserViewModel> records = new List<AdminDisplayUserViewModel>();
+            int total = 0;
+
+            var query = accountAppService.GetAllUsersData().Select(p => new AdminDisplayUserViewModel
+            {
+
+                Active = p.Active,
+                Created_at = p.Created_at,
+                Email = p.Email,
+                FirstName = p.FirstName,
+                LastName = p.LastName,
+                ID = p.Id,
+                Photo = p.Photo,
+                Products = p.Products.Count,
+                Orders=p.Orders.Count
+
+            });
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                query = query.Where(q => q.FirstName != null && q.FirstName.Contains(name));
+            }
+
+            if (!string.IsNullOrWhiteSpace(email))
+            {
+                query = query.Where(q => q.Email != null && q.Email.Contains(email));
+            }
+            if (!string.IsNullOrEmpty(sortBy) && !string.IsNullOrEmpty(direction))
+            {
+                if (direction.Trim().ToLower() == "asc")
+                {
+                    switch (sortBy.Trim().ToLower())
+                    {
+                        case "name":
+                            query = query.OrderBy(q => q.FirstName);
+                            break;
+                        case "email":
+                            query = query.OrderBy(q => q.Email);
+                            break;
+
+                    }
+                }
+                else
+                {
+                    switch (sortBy.Trim().ToLower())
+                    {
+
+                        case "name":
+                            query = query.OrderByDescending(q => q.FirstName);
+                            break;
+                        case "email":
+                            query = query.OrderByDescending(q => q.Email);
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                query = query.OrderBy(q => q.ID);
+            }
+
+            total = query.Count();
+            if (page.HasValue && limit.HasValue)
+            {
+                int start = (page.Value - 1) * limit.Value;
+                records = query.Skip(start).Take(limit.Value).ToList();
+            }
+            else
+            {
+                records = query.ToList();
+            }
+            return this.Json(new { records, total }, JsonRequestBehavior.AllowGet);
+
+        }
+
+        public JsonResult GetAdmins(int? page, int? limit, string sortBy, string direction, string name, string email)
+        {
+            List<AdminDisplayUserViewModel> records = new List<AdminDisplayUserViewModel>();
+            int total = 0;
+
+            var query = accountAppService.GetAllAdmins().Select(p => new AdminDisplayUserViewModel
+            {
+
+                Active = p.Active,
+                Created_at = p.Created_at,
+                Email = p.Email,
+                FirstName = p.FirstName,
+                LastName = p.LastName,
+                ID = p.Id,
+                Photo = p.Photo,
+              
+
+            });
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                query = query.Where(q => q.FirstName != null && q.FirstName.Contains(name));
+            }
+
+            if (!string.IsNullOrWhiteSpace(email))
+            {
+                query = query.Where(q => q.Email != null && q.Email.Contains(email));
+            }
+            if (!string.IsNullOrEmpty(sortBy) && !string.IsNullOrEmpty(direction))
+            {
+                if (direction.Trim().ToLower() == "asc")
+                {
+                    switch (sortBy.Trim().ToLower())
+                    {
+                        case "name":
+                            query = query.OrderBy(q => q.FirstName);
+                            break;
+                        case "email":
+                            query = query.OrderBy(q => q.Email);
+                            break;
+
+                    }
+                }
+                else
+                {
+                    switch (sortBy.Trim().ToLower())
+                    {
+
+                        case "name":
+                            query = query.OrderByDescending(q => q.FirstName);
+                            break;
+                        case "email":
+                            query = query.OrderByDescending(q => q.Email);
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                query = query.OrderBy(q => q.ID);
+            }
+
+            total = query.Count();
+            if (page.HasValue && limit.HasValue)
+            {
+                int start = (page.Value - 1) * limit.Value;
+                records = query.Skip(start).Take(limit.Value).ToList();
+            }
+            else
+            {
+                records = query.ToList();
+            }
+            return this.Json(new { records, total }, JsonRequestBehavior.AllowGet);
+
         }
     }
 }

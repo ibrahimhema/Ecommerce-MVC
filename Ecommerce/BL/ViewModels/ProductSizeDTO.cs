@@ -9,8 +9,8 @@ namespace BL.ViewModels
     public class ProductSizeDTO
     {
         public int Id { get; set; }
-        public string Size { get; set; }
-        public decimal Price { get; set; }
+        public string SizeName { get; set; }
+        public decimal SizePrice { get; set; }
         public int ProductId { get; set; }
     }
 }

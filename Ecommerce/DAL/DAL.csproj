@@ -100,6 +100,14 @@
     <Compile Include="Migrations\202307122227339_AddRequiredTable.designer.cs">
       <DependentUpon>202307122227339_AddRequiredTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202307132026564_AddRequiredTable2.cs" />
+    <Compile Include="Migrations\202307132026564_AddRequiredTable2.designer.cs">
+      <DependentUpon>202307132026564_AddRequiredTable2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202307151600275_AddActiveToSubCat.cs" />
+    <Compile Include="Migrations\202307151600275_AddActiveToSubCat.designer.cs">
+      <DependentUpon>202307151600275_AddActiveToSubCat.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\About.cs" />
     <Compile Include="Model\Brand.cs" />
@@ -151,6 +159,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202307122227339_AddRequiredTable.resx">
       <DependentUpon>202307122227339_AddRequiredTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202307132026564_AddRequiredTable2.resx">
+      <DependentUpon>202307132026564_AddRequiredTable2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202307151600275_AddActiveToSubCat.resx">
+      <DependentUpon>202307151600275_AddActiveToSubCat.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

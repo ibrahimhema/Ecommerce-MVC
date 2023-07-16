@@ -13,9 +13,9 @@ namespace BL.AppServices
     {
         #region CURD
 
-        public List<Sub_Category> GetAllSubCategories()
+        public IQueryable<Sub_Category> GetAllSubCategories()
         {
-            return Mapper.Map<List<Sub_Category>>(TheUnitOfWork.SubCategory.GetAllSubCategories());
+            return TheUnitOfWork.SubCategory.GetAllSubCategories();
         }
         public Sub_Category GetSubCategory(int id)
         {
@@ -24,7 +24,7 @@ namespace BL.AppServices
 
 
 
-        public bool SaveNewSubCategory(Sub_Category SubCategory)
+        public bool SaveNewSubCategory(SubCategoryViewModel SubCategory)
         {
             bool result = false;
             var subcategory = Mapper.Map<Sub_Category>(SubCategory);
@@ -36,9 +36,9 @@ namespace BL.AppServices
         }
 
 
-        public bool UpdateSubCategory(Sub_Category SubCategory)
+        public bool UpdateSubCategory(Sub_Category SubCategory,SubCategoryViewModel subCategoryViewModel)
         {
-            //var subcategory = Mapper.Map<Sub_Category>(SubCategory);
+            SubCategory = Mapper.Map(subCategoryViewModel,SubCategory);
             TheUnitOfWork.SubCategory.Update(SubCategory);
             TheUnitOfWork.Commit();
 
@@ -79,5 +79,9 @@ namespace BL.AppServices
           
             return Mapper.Map<List<Sub_Category>>(TheUnitOfWork.SubCategory.GetWhere(s => s.Cat_Id == MainCatid).ToList());
         }
+
+
+
+  
     }
 }

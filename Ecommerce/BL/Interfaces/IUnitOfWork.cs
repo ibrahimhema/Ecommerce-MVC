@@ -30,6 +30,7 @@ namespace BL.Interfaces
 
         ProductImagesRepositoty ProductImagesRepositoty { get; }
         ProductColorRepositoty ProductColorRepositoty { get; }
+        ProductSizeRepositoty ProductSizeRepositoty { get; }
         int Commit();
     }
 }

@@ -3,9 +3,7 @@ using BL.Bases;
 using DAL.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using BL.ViewModels;
 
 namespace BL.AppServices
 {
@@ -19,12 +17,12 @@ namespace BL.AppServices
         }
         public Main_Category GetMain_Category(int id)
         {
-            return Mapper.Map<Main_Category>(TheUnitOfWork.MainCategory.GetMainCategoryById(id));
+            return TheUnitOfWork.MainCategory.GetMainCategoryById(id);
         }
 
 
 
-        public bool SaveNewMain_Category(Main_Category Main_Category)
+        public bool SaveNewMain_Category(MainCategoryViewModelForAjax Main_Category)
         {
             bool result = false;
             var main_Cat = Mapper.Map<Main_Category>(Main_Category);
@@ -36,10 +34,10 @@ namespace BL.AppServices
         }
 
 
-        public bool UpdateMain_Category(Main_Category Main_Category)
+        public bool UpdateMain_Category(Main_Category Main_Category, MainCategoryViewModelForAjax mainCategoryViewModelForAjax)
         {
-            var main_Cat = Mapper.Map<Main_Category>(Main_Category);
-            TheUnitOfWork.MainCategory.Update(main_Cat);
+            Main_Category = Mapper.Map(mainCategoryViewModelForAjax, Main_Category);
+            TheUnitOfWork.MainCategory.Update(Main_Category);
             TheUnitOfWork.Commit();
 
             return true;

@@ -1,0 +1,630 @@
+﻿@model BL.ViewModels.ProductViewModel
+
+@{
+    ViewBag.Title = "CreateProduct";
+    Layout = "~/Views/Shared/_adminPanel.cshtml";
+    SelectList selectListItems = new SelectList(ViewBag.brands, "Id", "Name");
+
+    SelectList selectListsubCategory = new SelectList(ViewBag.subCategory, "Id", "Name");
+
+}
+
+<h2>CreateProduct</h2>
+
+
+<form class="form-group" method="post" action="UpdateProduct" enctype="multipart/form-data" id="imageForm">
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+
+
+
+
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="col-12 text-center">
+            <div id="imageContainer" class="rounded-circle ">
+
+                <input type="file" name="imageFile" id="imageFile" accept="image/png, image/jpeg, image/jpg" class="form-control" onchange="uploadImage()" />
+
+                <img src="~/Content/Imgs/default.jpg" id="img" class="h-100 w-100" />
+            </div>
+        </div>
+
+
+        @Html.Hidden("Id")
+
+        <div class="col-md-4 form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.Photo, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Photo, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Photo, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+        <div class="col-md-4 form-group">
+            @Html.LabelFor(model => model.Desc, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Desc, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Desc, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-md-4 form-group">
+            @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-md-4 form-group">
+            @Html.LabelFor(model => model.Quantity, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-md-4 form-group">
+            @Html.LabelFor(model => model.Offer_Price, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Offer_Price, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Offer_Price, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-md-4 form-group">
+            @Html.LabelFor(model => model.Active, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Active, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Active, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-md-4 form-group">
+
+
+            <label for="Sub_Cat_Id" class="control-label col-md-2"> Category</label>
+            <div class="col-md-10 form-group">
+                @*  @Html.EditorFor(model => model.Sub_Cat_Id, new { htmlAttributes = new { @class = "form-control" } })*@
+                @Html.DropDownListFor(model => model.Sub_Cat_Id, selectListsubCategory, new { @class = "form-control" })
+
+                @Html.ValidationMessageFor(model => model.Sub_Cat_Id, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-md-4 form-group">
+            <label for="Brand_Id" class="control-label col-md-2"> Brand</label>
+            <div class="col-md-10">
+
+                @Html.DropDownListFor(model => model.Brand_Id, selectListItems, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Brand_Id, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-12 text-center">
+
+            <div class="form-group">
+                <div class="">
+                    <input type="submit" value="Update" class="btn btn-primary" />
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</form>
+
+
+
+
+<div class="mb-4"></div>
+<!--this section for datatable grid-->
+@if (Model.Id != 0)
+{
+    <div class="row mt-4 mb-4">
+        <div class="col-9">
+            <form class="form-inline">
+                <input id="txtSize" type="text" placeholder="Size..." class="form-control mb-2 mr-sm-2 mb-sm-0" />
+                <input id="txtPrice" type="text" placeholder="Price..." class="form-control mb-2 mr-sm-2 mb-sm-0" />
+                <input id="txtProductId" type="hidden" />
+                <button id="btnSearch" type="button" class="btn btn-default">Search</button> &nbsp;
+                <button id="btnClear" type="button" class="btn btn-default">Clear</button>
+            </form>
+        </div>
+        <div class="col-3">
+            <button id="btnAdd" type="button" class="btn btn-default pull-right">Add New Size</button>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 10px">
+        <div class="col-12" style="margin-bottom: 90px;">
+            <table id="grid"></table>
+        </div>
+    </div>
+
+}
+
+
+
+<div id="dialog" style="display: none">
+    <input type="hidden" id="Id" />
+    <form>
+        <div class="form-group">
+            <label for="Name">Size </label>
+            <input type="text" class="form-control modelDataGrid" id="txtSizeName" style="color:black">
+        </div>
+        <div class="form-group">
+            <label for="Price">Price</label>
+            <input type="text" class="form-control modelDataGrid" id="txtSizePrice" style="color:black" />
+        </div>
+        <button type="button" id="btnSave" class="btn btn-default">Save</button>
+        <button type="button" id="btnCancel" class="btn btn-default">Cancel</button>
+    </form>
+</div>
+
+
+<div class="mb-4"></div>
+<!--End of datatable-->
+<!--this section for datatable grid-->
+@if (Model.Id != 0)
+{
+    <div class="row mt-4 mb-4">
+        <div class="col-9">
+            <form class="form-inline">
+                <input id="txtImage" type="text" placeholder="Image..." class="form-control mb-2 mr-sm-2 mb-sm-0" />
+
+                <input id="txtProductId" type="hidden" />
+                <button id="btnImageSearch" type="button" class="btn btn-default">Search</button> &nbsp;
+                <button id="btnImageClear" type="button" class="btn btn-default">Clear</button>
+            </form>
+        </div>
+        <div class="col-3">
+            <button id="btnImageAdd" type="button" class="btn btn-default pull-right">Add New Image</button>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 10px">
+        <div class="col-12" style="margin-bottom: 90px;">
+            <table id="gridImage"></table>
+        </div>
+    </div>
+
+}
+
+
+
+<div id="dialogImage" style="display: none">
+    <input type="hidden" id="Id" />
+    <form enctype="multipart/form-data">
+     
+
+        <div id="imageContainer" class="rounded-circle form-group">
+
+            <input type="file" name="imageFile" id="txtImageName" accept="image/png, image/jpeg, image/jpg" class="form-control" onchange="uploadImage('txtImageName','imgProduct')" />
+
+            <img src="~/Content/Imgs/default.jpg" id="imgProduct" class="h-100 w-100" />
+        </div>
+
+
+        <button type="button" id="btnImageSave" class="btn btn-default">Save</button>
+        <button type="button" id="btnImageCancel" class="btn btn-default">Cancel</button>
+    </form>
+</div>
+
+
+<div class="mb-4"></div>
+<!--End of datatable-->
+<!--this section for color datatable grid-->
+@if (Model.Id != 0)
+{
+    <div class="row mt-4 mb-4">
+        <div class="col-9">
+            <form class="form-inline">
+                <input id="txtColor" type="text" placeholder="Color..." class="form-control mb-2 mr-sm-2 mb-sm-0" />
+
+                <input id="txtProductId" type="hidden" />
+                <button id="btnColorSearch" type="button" class="btn btn-default">Search</button> &nbsp;
+                <button id="btnColorClear" type="button" class="btn btn-default">Clear</button>
+            </form>
+        </div>
+        <div class="col-3">
+            <button id="btnColorAdd" type="button" class="btn btn-default pull-right">Add New Color</button>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 10px">
+        <div class="col-12" style="margin-bottom: 90px;">
+            <table id="gridColor"></table>
+        </div>
+    </div>
+
+}
+
+
+
+<div id="dialogColor" style="display: none">
+    <input type="hidden" id="Id" />
+    <form>
+        <div class="form-group">
+            <label for="Name">Color </label>
+            <input type="color" class="form-control" id="txtColorName" style="color:black">
+        </div>
+
+        <button type="button" id="btnColorSave" class="btn btn-default">Save</button>
+        <button type="button" id="btnColorCancel" class="btn btn-default">Cancel</button>
+    </form>
+</div>
+
+
+
+<!--End of datatable-->
+
+
+
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        let grid, dialog;
+        function Edit(e) {
+            $('#Id').val(e.data.id);
+       
+            $('#txtSizeName').val(e.data.record.SizeName);
+            $('#txtSizePrice').val(e.data.record.SizePrice);
+            $('#ProductId').val('@Model.Id');
+
+            dialog.open('Edit Size');
+        }
+        function Save() {
+            var record = {
+                Id: $('#Id').val(),
+                SizeName: $('#txtSizeName').val(),
+                SizePrice: $('#txtSizePrice').val(),
+                ProductId: '@Model.Id'
+            };
+            $.ajax({ url: '/Product/Save', data: { record: record }, method: 'POST' })
+                .done(function () {
+                    dialog.close();
+                    grid.reload();
+                })
+                .fail(function () {
+                    alert('Failed to save.');
+                    dialog.close();
+                });
+        }
+        function Delete(e) {
+            if (confirm('Are you sure?')) {
+                $.ajax({ url: '/Product/DeleteProductAjax', data: { id: e.data.id }, method: 'POST' })
+                    .done(function () {
+                        grid.reload();
+                    })
+                    .fail(function () {
+                        alert('Failed to delete.');
+                    });
+            }
+        }
+    $(document).ready(function () {
+        if ('@Model.Id' !== null || '@Model.Id' !== 0) {
+             grid = $('#grid').grid({
+                primaryKey: 'Id',
+                dataSource: '/Product/GetSizes?productId=' + '@Model.Id',
+                uiLibrary: 'bootstrap4',
+                columns: [
+                    { field: 'Id', width: 48 },
+                    { field: 'SizeName', sortable: true },
+                    { field: 'SizePrice', sortable: true },
+                    { field: 'ProductId' },
+                    { title: '', field: 'Edit', width: 42, type: 'icon', icon: 'fa fa-pencil', tooltip: 'Edit', events: { 'click': Edit } },
+                    { title: '', field: 'Delete', width: 42, type: 'icon', icon: 'fa fa-remove', tooltip: 'Delete', events: { 'click': Delete } }
+                ],
+                pager: { limit: 5, sizes: [2, 5, 10, 20] }
+            });
+            dialog = $('#dialog').dialog({
+                uiLibrary: 'bootstrap4',
+                iconsLibrary: 'fontawesome',
+                autoOpen: false,
+                resizable: false,
+                modal: true
+            });
+            $('#btnAdd').on('click', function () {
+                $('#Id').val('');
+                $('#txtSize').val('');
+                $('#txtPrice').val('');
+                dialog.open('Add Size');
+            });
+            $('#btnSave').on('click', Save);
+            $('#btnCancel').on('click', function () {
+                dialog.close();
+            });
+            $('#btnSearch').on('click', function () {
+                grid.reload({ sizeName: $('#txtSize').val(), sizeprice: $('#txtPrice').val(),productId : '@Model.Id'});
+            });
+            $('#btnClear').on('click', function () {
+                $('#txtPrice').val('');
+                $('#txtSize').val('');
+                grid.reload({ sizeName: '', sizeprice: '' ,productId : '@Model.Id'});
+            });
+        }
+
+        });
+    </script>
+
+
+    <!--this for image-->
+    <script type="text/javascript">
+        let grid2, dialog2;
+
+        function SaveImage() {
+            debugger
+            let Upload = document.getElementById('txtImageName');
+            var fileUpload = Upload.files[0];
+            if (fileUpload != undefined) {
+                alert('Please Select Image to save.');
+                return false;
+            }
+
+            var fileData = new FormData();
+
+            fileData.append(fileUpload.name ,fileUpload);
+
+            var record = {
+                id: $('#Id').val(),
+                name: $('#txtImageName').val(),
+
+                productId: '@Model.Id'
+            };
+
+            var xhttp = new XMLHttpRequest();
+            fileData.append('name', record.name);
+            fileData.append('productId', record.productId);
+            xhttp.open("POST", '/Product/ImageSave', true);
+            xhttp.send(fileData);
+            xhttp.onreadystatechange = function () {
+                if (this.status == 200) {
+
+                    dialog2.close();
+                    grid2.reload();
+                } else {
+                    alert('Failed to save.');
+                    dialog2.close();
+                }
+            };
+         
+
+          
+
+        }
+        function Delete(e) {
+            if (confirm('Are you sure?')) {
+                $.ajax({ url: '/Product/ImageDelete', data: { id: e.data.id }, method: 'POST' })
+                    .done(function () {
+                        grid2.reload();
+                    })
+                    .fail(function () {
+                        alert('Failed to delete.');
+                    });
+            }
+        }
+        $(document).ready(function () {
+
+        if ('@Model.Id' !== 0) {
+
+           // var fileData = new FormData();
+     @*       $('#txtImageName').change(function () {
+                alert('firrrrst')
+
+                // Checking whether FormData is available in browser
+                if (window.FormData !== undefined) {
+                    alert('second')
+                    var fileUpload = $("#txtImageName").get(0);
+                    var files = fileUpload.files;
+                    console.log(files)
+                    // Create FormData object
+
+
+                    // Looping over all files and add it to FormData object
+
+                    fileData.append(files[0].name,files[0]);
+                   // fileData.append('Name', files[0])
+                    console.log(fileData)
+                    record.data = fileData;
+                    // Adding one more key to FormData object
+                   // fileData.append('Image', ‘Manas’);
+                }
+            });*@
+
+            grid2 = $('#gridImage').grid({
+                primaryKey: 'Id',
+                dataSource: '/Product/GetImages?productId=' + '@Model.Id',
+                uiLibrary: 'bootstrap4',
+                columns: [
+                    { field: 'Id', width: 48 },
+                    { field: 'Name', sortable: true },
+                    { field: 'ImageURL', sortable: true,type:'image' },
+                    { field: 'ProductId' },
+                   @* { title: '', field: 'Edit', width: 42, type: 'icon', icon: 'fa fa-pencil', tooltip: 'Edit', events: { 'click': Edit } },*@
+                    { title: '', field: 'Delete', width: 42, type: 'icon', icon: 'fa fa-remove', tooltip: 'Delete', events: { 'click': Delete } }
+                ],
+                pager: { limit: 5, sizes: [2, 5, 10, 20] }
+             });
+
+            dialog2 = $('#dialogImage').dialog({
+                uiLibrary: 'bootstrap4',
+                iconsLibrary: 'fontawesome',
+                autoOpen: false,
+                resizable: false,
+                modal: true
+            });
+
+
+            contentType: false // Not to set any content header
+                processData: false // Not to process data
+            $('#btnImageAdd').on('click', function () {
+                $('#Id').val('');
+                $('#txtImageName').val('');
+
+                dialog2.open('Add Image');
+            });
+            $('#btnImageSave').on('click', SaveImage);
+            $('#btnCancel').on('click', function () {
+                dialog2.close();
+            });
+            $('#btnImageSearch').on('click', function () {
+                grid2.reload({ Name: $('#txtImage').val(),productId : '@Model.Id'});
+            });
+            $('#btnImageClear').on('click', function () {
+                $('#txtImage').val('');
+
+                grid2.reload({ Name: '', productId : '@Model.Id'});
+            });
+        }
+
+        });
+    </script>
+
+    <!--end-->
+    <!--this for color-->
+
+    <script type="text/javascript">
+        let grid3, dialog3;
+        function Edit(e) {
+            $('#Id').val(e.data.id);
+            $('#txtColorName').val(e.data.record.ColorName);
+            $('#ProductId').val('@Model.Id');
+
+            dialog3.open('Edit Color');
+        }
+        function Save() {
+            var record = {
+                Id: $('#Id').val(),
+                ColorName: $('#txtColorName').val(),
+            
+                ProductId: '@Model.Id'
+            };
+            $.ajax({ url: '/Product/SaveColor', data: { record: record }, method: 'POST' })
+                .done(function () {
+                    dialog3.close();
+                    grid3.reload();
+                })
+                .fail(function () {
+                    alert('Failed to save.');
+                    dialog3.close();
+                });
+        }
+        function Delete(e) {
+            if (confirm('Are you sure?')) {
+                $.ajax({ url: '/Product/DeleteColor', data: { id: e.data.id }, method: 'POST' })
+                    .done(function () {
+                        grid3.reload();
+                    })
+                    .fail(function () {
+                        alert('Failed to delete.');
+                    });
+            }
+        }
+    $(document).ready(function () {
+        if ('@Model.Id' !== null || '@Model.Id' !== 0) {
+            grid3 = $('#gridColor').grid({
+                primaryKey: 'Id',
+                dataSource: '/Product/GetColors?productId=' + '@Model.Id',
+                uiLibrary: 'bootstrap4',
+                columns: [
+                    { field: 'Id', width: 48 },
+                    { field: 'ColorName', sortable: true },
+                  
+                    { field: 'ProductId' },
+                    { title: '', field: 'Edit', width: 42, type: 'icon', icon: 'fa fa-pencil', tooltip: 'Edit', events: { 'click': Edit } },
+                    { title: '', field: 'Delete', width: 42, type: 'icon', icon: 'fa fa-remove', tooltip: 'Delete', events: { 'click': Delete } }
+                ],
+                pager: { limit: 5, sizes: [2, 5, 10, 20] }
+            });
+            dialog3 = $('#dialogColor').dialog({
+                uiLibrary: 'bootstrap4',
+                iconsLibrary: 'fontawesome',
+                autoOpen: false,
+                resizable: false,
+                modal: true
+            });
+            $('#btnColorAdd').on('click', function () {
+                $('#Id').val('');
+                $('#txtColorName').val('');
+                dialog3.open('Add Color');
+            });
+            $('#btnColorSave').on('click', Save);
+            $('#btnColorCancel').on('click', function () {
+                dialog3.close();
+            });
+            $('#btnColorSearch').on('click', function () {
+                grid3.reload({ ColorName: $('#txtColor').val(),productId : '@Model.Id'});
+            });
+            $('#btnColorClear').on('click', function () {
+                $('#txtColor').val('');
+           
+                grid3.reload({ colorName: '' ,productId : '@Model.Id'});
+            });
+        }
+
+        });
+    </script>
+    <!--end-->
+
+
+    <script>
+  @*      function UploadImageProduct(fileInput) {
+            var fileToUpload = fileInput.files.item(0)
+
+            var filereader = new FileReader();
+            filereader.onload = (event) => {
+                document.getElementById("img").src = event.target.result;
+
+            }
+            filereader.readAsDataURL(fileToUpload)
+        }*@
+
+
+
+        function uploadImage(fileId, imageId) {
+            debugger
+            let input = document.getElementById(fileId);
+
+            var fileToUpload = input.files.item(0)
+
+            var filereader = new FileReader();
+            filereader.onload = (event) => {
+                document.getElementById(imageId).src = event.target.result;
+
+            }
+            filereader.readAsDataURL(fileToUpload)
+
+
+
+
+            /*  if (input.files && input.files[0]) {
+          
+                  var xhttp = new XMLHttpRequest();
+                  xhttp.onreadystatechange = function () {
+                      if (this.readyState == 4 && this.status == 200) {
+                          console.log(xhttp.responseText);
+                          document.getElementById('img').src = xhttp.responseText;
+                      }
+                  };
+                 
+                  xhttp.open("POST", "/Image/upload", true);
+                  var formData = new FormData(document.getElementById('imageForm'));
+                 
+                  xhttp.send(formData);
+              }*/
+        }
+    </script>
+}

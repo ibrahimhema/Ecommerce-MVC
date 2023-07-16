@@ -18,8 +18,8 @@ namespace BL.Repositories
         public List<Product> GetAllBroducts()
         {
 
-            //return GetAll().ToList();
-            return new List<Product>();
+            return GetAll().ToList();
+            
         }
         public int GetAllBroductsCount()
         {

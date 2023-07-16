@@ -21,8 +21,58 @@
 <!-- End Navbar -->
 <div class="content">
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
+        <div class="row mt-4 mb-4">
+            <!--start new datagrid-->
+
+
+            <div class="col-9">
+                <form class="form-inline">
+                    <input id="txtName" type="text" placeholder="Name..." class="form-control mb-2 mr-sm-2 mb-sm-0"  />
+                    <input id="txtPrice" type="text" placeholder="Price..." class="form-control mb-2 mr-sm-2 mb-sm-0"  />
+                    <button id="btnSearch" type="button" class="gj-button-md">Search</button>
+                    <button id="btnClear" type="button" class="gj-button-md">Clear</button>
+                </form>
+            </div>
+
+            <div class="col-3">
+                <button id="btnAdd" type="button" class="btn btn-default pull-right">Add New Product</button>
+            </div>
+        </div>
+            
+        <div class="clear-both"></div>
+        <div class="margin-top-10">
+            <table id="grid"></table>
+        </div>
+
+        <div id="dialog" class="gj-display-none">
+            <div data-role="body">
+                <input type="hidden" id="Id" />
+                <div class="form-row">
+                    <input type="text" class="gj-textbox-md" id="Name" placeholder="Name...">
+                </div>
+                <div class="form-row">
+                    <select id="Nationality" width="100%" placeholder="Nationality..."></select>
+                </div>
+                <div class="form-row">
+                    <input type="text" id="DateOfBirth" placeholder="Date Of Birth..." width="100%" />
+                </div>
+                <div class="form-row">
+                    <label for="IsActive"><input type="checkbox" id="IsActive" /> &nbsp;Is Active?</label>
+                </div>
+            </div>
+            <div data-role="footer">
+                <button type="button" id="btnSave" class="gj-button-md">Save</button>
+                <button type="button" id="btnCancel" class="gj-button-md">Cancel</button>
+            </div>
+
+
+
+
+
+
+
+            <!--end new datagrid-->
+            @*  <div class="col-md-12">
                 <div class="card">
                     <div class="card-header card-header-primary">
                         <h4 class="card-title ">Simple Table</h4>
@@ -102,7 +152,7 @@
                                                 @product.Brand.Name
                                             </td>
                                             <td>
-                                                <a href="/Product/UpdateProduct/@product.Id">Edit</a>
+                                                <a href="/Product/GetProductDetails?productId=@product.Id">Edit</a>
                                             </td>
                                             <td>
                                                 <a href="/Product/DeleteProduct/@product.Id">Delete</a>
@@ -116,10 +166,80 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>*@
 
         </div>
     </div>
 </div>
 
 
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+<script type="text/javascript">
+        let grid, dialog;
+        function Edit(e) {
+            $('#Id').val(e.data.id);
+
+          window.location.href = '@Url.Action("GetProductDetails", "Product")'+'?productId=' + e.data.id;
+        }
+        function Save() {
+            window.location.href = '@Url.Action("CreateProduct", "Product")';
+
+        }
+        function Delete(e) {
+            if (confirm('Are you sure?')) {
+                $.ajax({ url: '/Product/DeleteProduct', data: { id: e.data.id }, method: 'POST' })
+                    .done(function () {
+                        grid.reload();
+                    })
+                    .fail(function () {
+                        alert('Failed to delete.');
+                    });
+            }
+        }
+    $(document).ready(function () {
+
+             grid = $('#grid').grid({
+                primaryKey: 'Id',
+                 dataSource: '/Product/GetProducts',
+                uiLibrary: 'bootstrap4',
+                columns: [
+                    { field: 'Id', width: 48 },
+                    { field: 'Name', sortable: true },
+                    { field: 'Desc'},
+                    { field: 'Price', sortable: true },
+                    { field: 'Quantity' },
+                    { field: 'Profit' },
+                    { field: 'Vendor_Name', title:'Vendor Name' },
+                    { field: 'Active', title: 'Active', type: 'checkbox', width: 90, align: 'center' },
+                    { title: '', field: 'Edit', width: 42, type: 'icon', icon: 'fa fa-pencil', tooltip: 'Edit', events: { 'click': Edit } },
+                    { title: '', field: 'Delete', width: 42, type: 'icon', icon: 'fa fa-remove', tooltip: 'Delete', events: { 'click': Delete } }
+                ],
+                pager: { limit: 5, sizes: [2, 5, 10, 20] }
+            });
+            dialog = $('#dialog').dialog({
+                uiLibrary: 'bootstrap4',
+                iconsLibrary: 'fontawesome',
+                autoOpen: false,
+                resizable: false,
+                modal: true
+            });
+            $('#btnAdd').on('click', function () {
+                Save();
+            });
+            $('#btnSave').on('click', Save);
+            $('#btnCancel').on('click', function () {
+                dialog.close();
+            });
+            $('#btnSearch').on('click', function () {
+                grid.reload({ Name: $('#txtName').val(), Price: $('#txtPrice').val()});
+            });
+
+
+
+        });
+</script>
+
+
+}

@@ -67,12 +67,11 @@ namespace BL.AppServices
         }
 
 
-        public List<AdminDisplayUserViewModel> GetAllAdmins()
+        public List<ApplicationUser> GetAllAdmins()
         {
-            return Mapper
-                .Map<List<AdminDisplayUserViewModel>>(
-                TheUnitOfWork.Account.GetAllUsersByRole(Role_Name.Admin)
-                );
+            return
+                TheUnitOfWork.Account.GetAllUsersByRole(Role_Name.Admin);
+               
         }
         
         public List<AdminDisplayUserViewModel> GetAllUsers()
@@ -89,6 +88,20 @@ namespace BL.AppServices
                 .Map<List<AdminDisplayUserViewModel>>(
                 TheUnitOfWork.Account.GetAllUsersByRole(Role_Name.Vendor)
                 );
+        }
+        public List<ApplicationUser> GetAllVendorsData()
+        {
+            return
+
+                TheUnitOfWork.Account.GetAllUsersByRole(Role_Name.Vendor);
+                
+        }
+        public List<ApplicationUser> GetAllUsersData()
+        {
+            return
+
+                TheUnitOfWork.Account.GetAllUsersByRole(Role_Name.User);
+
         }
         public IdentityResult Edit(ApplicationUser user)
         {

@@ -39,7 +39,7 @@ namespace BL.Repositories
         {
             return GetAny(b => b.Id == productImages.Id);
         }
-        public Brand GetProductImagesId(int id)
+        public ProductImages GetProductImagesId(int id)
         {
             return GetFirstOrDefault(b => b.Id == id);
         }

@@ -25,5 +25,6 @@ namespace DAL.Model
         public Sub_Category Parent { get; set; }
 
         public List<Product> Products { get; set; }
+        public bool Active { get; set; }
     }
 }

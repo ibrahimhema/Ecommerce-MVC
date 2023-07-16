@@ -7,146 +7,333 @@
 
 }
 
-<select onselect="funcSelectOrderStautes(this)" onchange="funcSelectOrderStautes(this)" class="form-control">
-    <option value="0">Delivered</option>
-    <option value="1">Pending</option>
-    <option value="2">Cancelled</option>
-</select>
 
 
 
 
-<div class="container">
-    <div class="row">
-        <div class='col-sm-5'>
 
-            <input type='datetime-local' class="form-control" id='datetimepickerfrom' /><span>From</span>
+
+<div class="row mt-4 mb-4">
+    <div class="col-9">
+
+        <div class="col-9">
+            <form class="form-inline">
+                <input id="txtStauts" type="text" placeholder="Name..." class="form-control mb-2 mr-sm-2 mb-sm-0" />
+                <input id="txtFrom" type="datetime" placeholder="From..." class="form-control mb-2 mr-sm-2 mb-sm-0" />
+                <input id="txtTo" type="datetime" placeholder="To..." class="form-control mb-2 mr-sm-2 mb-sm-0" />
+                <button id="btnSearch" type="button" class="gj-button-md">Search</button>
+                <button id="btnClear" type="button" class="gj-button-md">Clear</button>
+            </form>
         </div>
-        <div class='col-sm-5'>
-
-            <input type='datetime-local' class="form-control" id='datetimepickerto' /><span>To</span>
-        </div>
-        <div class='col-sm-2'>
-
-            <button onclick="FunSearchByDate()">Search</button>
-        </div>
-
     </div>
+
+   
 </div>
-<div class="card-body">
-    <div class="table-responsive">
-        <table class="table table-striped" id="orderTable">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Id)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Total_Price)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Address)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Created_at)
-                    </th>
-                    <th>
-                        User Name
-                    </th>
-                    <th>
-                        User Type
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Payment_Id)
-                    </th>
-                    <th>
-                        Status
-                    </th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
 
-                    <tr id="@item.Id">
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Id)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Total_Price)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Address)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Created_at)
-                        </td>
-                        <td>
-                            @accountAppService.FindById(item.User_Id).UserName
-                        </td>
-                        <td>
-                            @accountAppService.GetRoleByUserId(item.User_Id)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Payment_Id)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Status)
-                        </td>
-                        <td>
-                            @Html.ActionLink("Edit", "Edit", new { id = item.Id, RowId = item.Id })
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" onclick="funcOpenModelForShowOrderDetails(@item.Id)">
-                                Show Details
-                            </button>
+<div class="clear-both"></div>
+<div class="margin-top-10">
+    <table id="grid"></table>
+</div>
 
-                        </td>
+<div id="dialog" class="gj-display-none">
+    <div data-role="body" class="text-center form-group">
+        <input type="hidden" id="Id" />
+
+        <div class="form-row">
+            <select type="text" class="gj-textbox-md" id="txtOrderStauts" placeholder="Name...">
+                <option value="0">
+                    Delivered
+                </option>
+                <option value="1">
+                    Pending
+                </option>
+                <option value="2">
+                    Cancelled
+                </option>
+                
+            </select>
+        </div>
+
+
+    </div>
+    <div data-role="footer">
+        <button type="button" id="btnSave" class="gj-button-md">Save</button>
+        <button type="button" id="btnCancel" class="gj-button-md">Cancel</button>
+    </div>
+
+
+</div>
+
+
+
+
+
+
+
+
+@*<select onselect="funcSelectOrderStautes(this)" onchange="funcSelectOrderStautes(this)" class="form-control">
+        <option value="0">Delivered</option>
+        <option value="1">Pending</option>
+        <option value="2">Cancelled</option>
+    </select>
+
+
+
+
+    <div class="container">
+        <div class="row">
+            <div class='col-sm-5'>
+
+                <input type='datetime-local' class="form-control" id='datetimepickerfrom' /><span>From</span>
+            </div>
+            <div class='col-sm-5'>
+
+                <input type='datetime-local' class="form-control" id='datetimepickerto' /><span>To</span>
+            </div>
+            <div class='col-sm-2'>
+
+                <button onclick="FunSearchByDate()">Search</button>
+            </div>
+
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped" id="orderTable">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Id)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Total_Price)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Address)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Created_at)
+                        </th>
+                        <th>
+                            User Name
+                        </th>
+                        <th>
+                            User Type
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Payment_Id)
+                        </th>
+                        <th>
+                            Status
+                        </th>
+                        <th></th>
+                        <th></th>
                     </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+
+                        <tr id="@item.Id">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Id)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Total_Price)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Address)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Created_at)
+                            </td>
+                            <td>
+                                @accountAppService.FindById(item.User_Id).UserName
+                            </td>
+                            <td>
+                                @accountAppService.GetRoleByUserId(item.User_Id)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Payment_Id)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Edit", "Edit", new { id = item.Id, RowId = item.Id })
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" onclick="funcOpenModelForShowOrderDetails(@item.Id)">
+                                    Show Details
+                                </button>
+
+                            </td>
+                        </tr>
 
 
-                }
-            </tbody>
+                    }
+                </tbody>
 
 
 
-        </table>
-    </div>
-    </div>
-      
+            </table>
+        </div>
+        </div>*@
 
 
 
 
-        <div class="modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Modal title</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body" id="modal-appended">
 
-                    </div>
-                    <div class="modal-footer">
+<div class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modal-appended">
 
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
+    </div>
+</div>
 
 
 
 
 
 
-        @section scripts{
-            <script>
+@section scripts{
+
+    <script type="text/javascript">
+        let grid, dialog;
+        function Save() {
+            var record = {
+                ID: $('#ID').val(),
+                Name: $('#Name').val(),
+                CountryID: nationalityDropdown.value(),
+                DateOfBirth: gj.core.parseDate(dateOfBirth.value(), 'mm/dd/yyyy').toISOString(),
+                IsActive: $('#IsActive').prop('checked')
+            };
+            $.ajax({ url: '/CheckOut/EditStutes', data: { record: record }, method: 'POST' })
+                .done(function () {
+                    dialog.close();
+                    grid.reload();
+                })
+                .fail(function () {
+                    alert('Failed to save.');
+                    dialog.close();
+                });
+        }
+
+        function Edit(e) {
+            debugger
+            $('#Id').val(e.data.id);
+
+            $('#txtOrderStauts').val(e.data.record.Stutes);
+
+
+            dialog.open('Edit Stutes');
+        }
+        function Details(e) {
+            debugger
+
+            funcOpenModelForShowOrderDetails(e.data.id);
+            return false;
+        }
+
+
+        function Delete(e) {
+            if (confirm('Are you sure?')) {
+                $.ajax({ url: '/SubCategory/Delete', data: { id: e.data.id }, method: 'POST' })
+                    .done(function (res) {
+
+                        if (res.result == true) {
+                            alert("Success Delete")
+                            grid.reload();
+                        } else {
+                            alert(res.message);
+                        }
+
+                    })
+                    .fail(function () {
+                        alert('Failed to delete.');
+                    });
+            }
+        }
+        $(document).ready(function () {
+
+            grid = $('#grid').grid({
+                primaryKey: 'Id',
+                dataSource: '/CheckOut/GetCheckout',
+                uiLibrary: 'bootstrap4',
+                columns: [
+                    { field: 'Id', width: 48 },
+                    { field: 'Total_Price', title: 'Total Price', sortable: true },
+                    { field: 'Address', title: 'Photo', type: 'image' },
+                    { field: 'Created_at', title: 'Created At', sortable: true, type:'date' },
+                    { field: 'UserName', title: 'User Name' },
+                    { field: 'Payment_Id', title: 'Payment Id' },
+                    { field: 'Status', sortable: true },
+
+                    { title: '', field: 'Edit', width: 42, type: 'icon', icon: 'fa fa-pencil', tooltip: 'Edit', events: { 'click': Edit } },
+                    { title: '', field: 'Delete', width: 42, type: 'icon', icon: 'fa fa-remove', tooltip: 'Delete', events: { 'click': Delete } },
+                    { title: '', field: 'Details', width: 42, type: 'icon', icon: 'fa fa-pencil', tooltip: 'Details', events: { 'click': Details } }
+                ],
+                pager: { limit: 5, sizes: [2, 5, 10, 20] }
+            });
+            dialog = $('#dialog').dialog({
+                uiLibrary: 'bootstrap4',
+                iconsLibrary: 'fontawesome',
+                autoOpen: false,
+                resizable: false,
+                modal: true
+            });
+
+          
+            $('#btnSave').on('click', Save);
+            $('#btnCancel').on('click', function () {
+                dialog.close();
+            });
+            $('#btnSearch').on('click', function () {
+                grid.reload({ status: $('#txtStauts').val(), from: $('#txtFrom'), to: $('#txtTo') });
+            });
+
+
+
+        });
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script>
         function funcSelectOrderStautes(SelectedBox) {
 
          $.ajax(
@@ -217,7 +404,7 @@
                         }
                     });
         }
-            </script>
+    </script>
 
 
-        }
+}

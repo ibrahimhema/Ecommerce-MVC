@@ -35,7 +35,10 @@ namespace BL.ViewModels
         }
         public string ID { get; set; }
         public string Email { get; set; }
-
-public string Photo { set; get; }
+        public bool Active { get; set; }
+        public DateTime Created_at { get; set; }
+        public int Products { get; set; }
+        public int Orders { get; set; }
+        public string Photo { set; get; }
     }
 }

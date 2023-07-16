@@ -19,7 +19,7 @@ namespace BL.Repositories
 
         public List<Order> GetAllCheckOuts()
         {
-            return GetAll().ToList();
+            return GetAll().Include(x=>x.User).Include(x=>x.Payment).ToList();
         }
 
         public bool InsertCheckOut(Order CheckOut)

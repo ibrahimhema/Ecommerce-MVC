@@ -14,6 +14,7 @@ namespace DAL.Model
         public string Name { get; set; }
      
         public string Photo { get; set; }
+        public bool Avtive { get; set; }
 
         public virtual List<Sub_Category> Sub_Categories { get; set; }
     }

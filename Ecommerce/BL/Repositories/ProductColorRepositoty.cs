@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BL.Repositories
 {
-    public class ProductColorRepositoty : BaseRepository<ProductColor>
+    public class ProductColorRepositoty : BaseRepository<ProductColors>
     {
         public ProductColorRepositoty(DbContext db):base(db)
         {
@@ -17,16 +17,16 @@ namespace BL.Repositories
 
         #region CRUB
 
-        public List<ProductColor> GetAllProductColor()
+        public List<ProductColors> GetAllProductColor()
         {
             return GetAll().ToList();
         }
 
-        public bool InsertProductColor(ProductColor productColor)
+        public bool InsertProductColor(ProductColors productColor)
         {
             return Insert(productColor);
         }
-        public void UpdateProductColor(ProductColor productColor)
+        public void UpdateProductColor(ProductColors productColor)
         {
             Update(productColor);
         }
@@ -35,11 +35,11 @@ namespace BL.Repositories
             Delete(id);
         }
 
-        public bool CheckProductColorExists(ProductColor productColor)
+        public bool CheckProductColorExists(ProductColors productColor)
         {
             return GetAny(b => b.Id == productColor.Id);
         }
-        public ProductColor GetproductColorId(int id)
+        public ProductColors GetproductColorId(int id)
         {
             return GetFirstOrDefault(b => b.Id == id);
         }

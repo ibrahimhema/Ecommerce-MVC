@@ -1,6 +1,6 @@
 ﻿using BL.Bases;
 using BL.ViewModels;
-
+using DAL.Model;
 using System.Collections.Generic;
 
 
@@ -14,17 +14,21 @@ namespace BL.AppServices
         {
             return Mapper.Map<List<ProductSizeDTO>>(TheUnitOfWork.ProductSizeRepositoty.GetAllProductSize());
         }
-        public ProductSizeDTO GetProductSize(int id)
+        public ProductSizes GetProductSize(int id)
         {
-            return Mapper.Map<ProductSizeDTO>(TheUnitOfWork.ProductSizeRepositoty.GetProductSizeId(id));
+            return TheUnitOfWork.ProductSizeRepositoty.GetProductSizeId(id);
         }
 
+        public List<ProductSizeDTO> GetProductSizeByProductId(int ProductId)
+        {
+            return Mapper.Map<List<ProductSizeDTO>>(TheUnitOfWork.ProductSizeRepositoty.GetAllProductSizeByProductId(ProductId));
+        }
 
 
         public bool SaveNewProductSize(ProductSizeDTO productSizeDTO)
         {
             bool result = false;
-            var brand = Mapper.Map<ProductSize>(productSizeDTO);
+            var brand = Mapper.Map<ProductSizes>(productSizeDTO);
             if (TheUnitOfWork.ProductSizeRepositoty.Insert(brand))
             {
                 result = TheUnitOfWork.Commit() > new int();
@@ -33,10 +37,10 @@ namespace BL.AppServices
         }
 
 
-        public bool UpdateProductSize(ProductSizeDTO productSizeDTO)
+        public bool UpdateProductSize(ProductSizes productSize)
         {
-            var Brand = Mapper.Map<ProductSize>(productSizeDTO);
-            TheUnitOfWork.ProductSizeRepositoty.Update(Brand);
+            //var Brand = Mapper.Map<ProductSizes>(productSizeDTO);
+            TheUnitOfWork.ProductSizeRepositoty.Update(productSize);
             TheUnitOfWork.Commit();
 
             return true;
@@ -53,7 +57,7 @@ namespace BL.AppServices
 
         public bool CheckProductSizeExists(ProductSizeDTO productSizeDTO)
         {
-            ProductSize Brand = Mapper.Map<ProductSize>(productSizeDTO);
+            ProductSizes Brand = Mapper.Map<ProductSizes>(productSizeDTO);
             return TheUnitOfWork.ProductSizeRepositoty.CheckProductSizeExists(Brand);
         }
         #endregion
